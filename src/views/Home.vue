@@ -4,7 +4,15 @@
       <div>
         <div class="title">
           <div>ПДА</div>
-          <ControlButton></ControlButton>
+          <ControlButton>сек</ControlButton>
+        </div>
+        <div class="title">
+          <div>Вдох</div>
+          <ControlButton>сек</ControlButton>
+        </div>
+        <div class="title">
+          <div>Продолжительность занятия</div>
+          <ControlButton>мин</ControlButton>
         </div>
       </div>
     </div>
@@ -24,6 +32,12 @@ export default {
 <style lang="scss" scoped>
 .title {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 0.5em;
+  // justify-content: flex-start;
+  > div{
+    margin-bottom: 0.5em;
+  }
 }
 </style>

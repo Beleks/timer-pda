@@ -1,8 +1,10 @@
 <template>
   <div class="main">
     <div class="input-block">
-      <div class="input-area"><input type="text" v-model="time" min="0" maxlength="3" /></div>
-      <div class="sec">сек</div>
+      <div class="input-area">
+        <input type="number" v-model="time" />
+      </div>
+      <div class="sec"><slot></slot></div>
     </div>
     <div class="change">
       <div class="minus" @click="minus()">-</div>
@@ -21,20 +23,31 @@ export default {
   computed: {
     time: {
       get: function () {
-        return this.t
+        return this.t;
       },
       set: function (value) {
-        console.log(value.length);
+        // toString(value);
+        if (value.length > 3) {
+          this.t = 0;
+          this.t = value.slice(0, 3);
+          return;
+        } else {
+          this.t = value;
+        }
       },
     },
   },
 
   methods: {
     plus() {
-      this.t++;
+      if (this.t < 999) {
+        this.t++;
+      }
     },
     minus() {
-      this.t--;
+      if (this.t > 0) {
+        this.t--;
+      }
     },
   },
 };
