@@ -2,7 +2,7 @@
   <div class="main">
     <div class="input-block">
       <div class="input-area">
-        <input type="number" v-model="time" />
+        <input type="text" v-model="time" />
       </div>
       <div class="sec"><slot></slot></div>
     </div>
@@ -15,15 +15,25 @@
 
 <script>
 export default {
+  props: {
+    minValue: Number,
+    maxValue: Number,
+  },
   data: () => {
     return {
-      t: "0",
+      t: -1,
     };
   },
   computed: {
     time: {
       get: function () {
-        return this.t;
+        console.log(this.t)
+        if (this.t === -1) {
+          this.t = this.minValue
+          return this.t;
+        } else {
+          return this.t;
+        }
       },
       set: function (value) {
         // toString(value);
@@ -40,12 +50,12 @@ export default {
 
   methods: {
     plus() {
-      if (this.t < 999) {
+      if (this.t < this.maxValue) {
         this.t++;
       }
     },
     minus() {
-      if (this.t > 0) {
+      if (this.t > this.minValue) {
         this.t--;
       }
     },
