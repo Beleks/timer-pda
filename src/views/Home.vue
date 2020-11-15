@@ -35,7 +35,20 @@
         </transition>
       </div>
       <div class="exhalation" :style="{ flexGrow: exhalationStyle }">
-        <div :class="['bg-inhale-2', {}]"></div>
+        <transition name="start" @after-enter="afterEnter">
+          <!-- <div v-show="startFlag"
+            :class="['bg-inhale', { start_bg_inhale: startFlag }]"
+            :style="{ transitionDuration: this.setings.inhale + 's' }"
+          ></div> -->
+          <div
+            v-show="startFlagTwo"
+            class="bg-inhale-2"
+            :style="{
+              transitionDuration: this.setings.pda - this.setings.inhale + 's',
+            }"
+          ></div>
+        </transition>
+        <!-- <div :class="['bg-inhale-2', {}]"></div> -->
       </div>
     </div>
     <div class="start" @click="start()">начать</div>
@@ -51,6 +64,7 @@ export default {
   data: () => {
     return {
       startFlag: false,
+      startFlagTwo: false,
       setings: {
         pda: 7,
         inhale: 1,
@@ -78,6 +92,7 @@ export default {
     // ==============
     afterEnter() {
       console.log("появился");
+      this.startFlagTwo = true;
     },
   },
   components: { ControlButton },
@@ -90,7 +105,7 @@ export default {
   // transition-timing-function: linear;
   // transition-property: width;
   // border: none;
-  // border-radius: 5px 0 0 5px;
+  // border-radius: 0;
   // height: 40px;
   // background-color: rgba(38, 166, 153, 0.8);
 }
@@ -99,6 +114,7 @@ export default {
 }
 .start-enter-to {
   width: 100%;
+  // border-radius: 0 5px 5px 0;
 }
 // .start-leave-active {
 //   transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
@@ -149,9 +165,9 @@ export default {
   // position: absolute;
   border: none;
   border-radius: 0 5px 5px 0;
-  background-color: rgba(38, 166, 153, 0.5);
+  background-color: rgba(239, 83, 80, 0.5);
   height: 40px;
-  width: 0%;
+  // width: 0%;
   transition: width 6s linear;
 }
 .start_bg_inhale {
