@@ -22,7 +22,10 @@
     </div>
     <div class="scale">
       <div class="inhale" :style="{ flexGrow: inhaleStyle }">
-        <div :class="['bg-inhale', { start_bg_inhale: startFlag }]"></div>
+        <div
+          :class="['bg-inhale', { start_bg_inhale: startFlag }]"
+          :style="{ transitionDuration: this.setings.inhale + 's' }"
+        ></div>
       </div>
       <div class="exhalation" :style="{ flexGrow: exhalationStyle }">
         <div :class="['bg-inhale-2']"></div>
@@ -105,7 +108,8 @@ export default {
   background-color: greenyellow;
   height: 40px;
   width: 0%;
-  transition: width 1s linear;
+  transition-timing-function: linear;
+  transition-property: width;
 }
 .bg-inhale-2 {
   // position: absolute;
