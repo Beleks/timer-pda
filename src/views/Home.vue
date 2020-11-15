@@ -4,11 +4,15 @@
       <div>
         <div class="title">
           <div>ПДА</div>
-          <ControlButton :minValue="7" :maxValue="999">сек</ControlButton>
+          <ControlButton :minValue="7" :maxValue="999" @changeParams="pda"
+            >сек</ControlButton
+          >
         </div>
         <div class="title">
           <div>Вдох</div>
-          <ControlButton :minValue="1" :maxValue="4">сек</ControlButton>
+          <ControlButton :minValue="1" :maxValue="4" @changeParams="inhale"
+            >сек</ControlButton
+          >
         </div>
         <div class="title">
           <div>Продолжительность занятия</div>
@@ -17,10 +21,12 @@
       </div>
     </div>
     <div class="scale">
-      <div class="inhale">
+      <div class="inhale" :style="{ flexGrow: inhaleStyle }">
         <div :class="['bg-inhale', { start_bg_inhale: startFlag }]"></div>
       </div>
-      <div class="exhalation"></div>
+      <div class="exhalation" :style="{ flexGrow: exhalationStyle }">
+        <div :class="['bg-inhale-2']"></div>
+      </div>
     </div>
     <div class="start" @click="start()">начать</div>
   </div>
@@ -35,11 +41,29 @@ export default {
   data: () => {
     return {
       startFlag: false,
+      setings: {
+        pda: 7,
+        inhale: 1,
+      },
     };
+  },
+  computed: {
+    inhaleStyle() {
+      return (1 / this.setings.pda) * this.setings.inhale;
+    },
+    exhalationStyle() {
+      return 1 - this.inhaleStyle;
+    },
   },
   methods: {
     start() {
       this.startFlag = true;
+    },
+    pda(value) {
+      this.setings.pda = value;
+    },
+    inhale(value) {
+      this.setings.inhale = value;
     },
   },
   components: { ControlButton },
@@ -67,11 +91,11 @@ export default {
   .inhale {
     border-radius: 5px 0 0 5px;
     border-right: none;
-    flex-grow: 0.14;
+    // flex-grow: 0.14;
   }
   .exhalation {
     border-radius: 0 5px 5px 0;
-    flex-grow: 0.86;
+    // flex-grow: 0.86;
   }
 }
 .bg-inhale {
@@ -83,11 +107,33 @@ export default {
   width: 0%;
   transition: width 1s linear;
 }
+.bg-inhale-2 {
+  // position: absolute;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  background-color: greenyellow;
+  height: 40px;
+  width: 0%;
+  transition: width 6s linear;
+}
 .start_bg_inhale {
   width: 100%;
 }
+
 .start {
   cursor: pointer;
   margin: 2em;
+}
+@keyframes start_bg_inhale {
+  0% {
+    .bg_inhale {
+      width: 100%;
+    }
+  }
+  50% {
+    .bg_inhale-2 {
+      width: 100%;
+    }
+  }
 }
 </style>

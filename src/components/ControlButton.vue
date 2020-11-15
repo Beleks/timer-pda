@@ -27,9 +27,9 @@ export default {
   computed: {
     time: {
       get: function () {
-        console.log(this.t)
+        console.log(this.t);
         if (this.t === -1) {
-          this.t = this.minValue
+          this.t = this.minValue;
           return this.t;
         } else {
           return this.t;
@@ -52,11 +52,13 @@ export default {
     plus() {
       if (this.t < this.maxValue) {
         this.t++;
+        this.$emit("changeParams", this.t);
       }
     },
     minus() {
       if (this.t > this.minValue) {
         this.t--;
+        this.$emit("changeParams", this.t);
       }
     },
   },
