@@ -22,13 +22,20 @@
     </div>
     <div class="scale">
       <div class="inhale" :style="{ flexGrow: inhaleStyle }">
-        <div
-          :class="['bg-inhale', { start_bg_inhale: startFlag }]"
-          :style="{ transitionDuration: this.setings.inhale + 's' }"
-        ></div>
+        <transition name="start" @after-enter="afterEnter">
+          <!-- <div v-show="startFlag"
+            :class="['bg-inhale', { start_bg_inhale: startFlag }]"
+            :style="{ transitionDuration: this.setings.inhale + 's' }"
+          ></div> -->
+          <div
+            v-show="startFlag"
+            class="bg-inhale"
+            :style="{ transitionDuration: this.setings.inhale + 's' }"
+          ></div>
+        </transition>
       </div>
       <div class="exhalation" :style="{ flexGrow: exhalationStyle }">
-        <div :class="['bg-inhale-2']"></div>
+        <div :class="['bg-inhale-2', {}]"></div>
       </div>
     </div>
     <div class="start" @click="start()">начать</div>
@@ -68,12 +75,39 @@ export default {
     inhale(value) {
       this.setings.inhale = value;
     },
+    // ==============
+    afterEnter() {
+      console.log("появился");
+    },
   },
   components: { ControlButton },
 };
 </script>
 
 <style lang="scss" scoped>
+.start-enter-active {
+  // transition: all 0.3s ease;
+  // transition-timing-function: linear;
+  // transition-property: width;
+  // border: none;
+  // border-radius: 5px 0 0 5px;
+  // height: 40px;
+  // background-color: rgba(38, 166, 153, 0.8);
+}
+.start-enter {
+  width: 0%;
+}
+.start-enter-to {
+  width: 100%;
+}
+// .start-leave-active {
+//   transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+// }
+// .start-enter, .start-leave-to
+// /* .slide-fade-leave-active до версии 2.1.8 */ {
+//   transform: translateX(10px);
+//   opacity: 0;
+// }
 .title {
   display: flex;
   flex-direction: column;
@@ -105,9 +139,9 @@ export default {
   // position: absolute;
   border: none;
   border-radius: 5px 0 0 5px;
-  background-color: greenyellow;
+  background-color: rgba(38, 166, 153, 0.8);
   height: 40px;
-  width: 0%;
+  // width: 0%;
   transition-timing-function: linear;
   transition-property: width;
 }
@@ -115,7 +149,7 @@ export default {
   // position: absolute;
   border: none;
   border-radius: 0 5px 5px 0;
-  background-color: greenyellow;
+  background-color: rgba(38, 166, 153, 0.5);
   height: 40px;
   width: 0%;
   transition: width 6s linear;
@@ -128,16 +162,16 @@ export default {
   cursor: pointer;
   margin: 2em;
 }
-@keyframes start_bg_inhale {
-  0% {
-    .bg_inhale {
-      width: 100%;
-    }
-  }
-  50% {
-    .bg_inhale-2 {
-      width: 100%;
-    }
-  }
-}
+// @keyframes start_bg_inhale {
+//   0% {
+//     .bg_inhale {
+//       width: 100%;
+//     }
+//   }
+//   50% {
+//     .bg_inhale-2 {
+//       width: 100%;
+//     }
+//   }
+// }
 </style>
