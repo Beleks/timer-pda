@@ -16,7 +16,9 @@
         </div>
         <div class="title">
           <div class="head">Продолжительность занятия</div>
-          <ControlButton :minValue="1" :maxValue="30">мин</ControlButton>
+          <ControlButton :minValue="1" :maxValue="30" @changeParams="time"
+            >мин</ControlButton
+          >
         </div>
       </div>
     </div>
@@ -75,6 +77,7 @@ export default {
       setings: {
         pda: 7,
         inhale: 2,
+        time: 20,
       },
     };
   },
@@ -102,6 +105,19 @@ export default {
           clearInterval(timer);
           scope.startFlag = true;
           scope.startClick = true;
+          let timerClok = scope.setings.time * 1000;
+          console.log(scope.setings.time * 1000);
+          setTimeout(() => {
+            // startClick: false,
+            // timer: false,
+            // startFlag: false,
+            // startFlagTwo: false,
+            console.log("конец");
+            scope.startClick = false;
+            scope.timer = false;
+            scope.startFlag = false;
+            scope.startFlagTwo = false;
+          }, timerClok);
         }
         scope.current--;
       }, 1000);
@@ -112,6 +128,9 @@ export default {
     },
     inhale(value) {
       this.setings.inhale = value;
+    },
+    time(value) {
+      this.setings.time = value * 60;
     },
     // ==============
     afterEnter() {
