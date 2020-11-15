@@ -3,19 +3,19 @@
     <div class="settings">
       <div>
         <div class="title">
-          <div>ПДА</div>
+          <div class="head">ПДА</div>
           <ControlButton :minValue="7" :maxValue="999" @changeParams="pda"
             >сек</ControlButton
           >
         </div>
         <div class="title">
-          <div>Вдох</div>
-          <ControlButton :minValue="1" :maxValue="4" @changeParams="inhale"
+          <div class="head">Вдох</div>
+          <ControlButton :minValue="2" :maxValue="6" @changeParams="inhale"
             >сек</ControlButton
           >
         </div>
         <div class="title">
-          <div>Продолжительность занятия</div>
+          <div class="head">Продолжительность занятия</div>
           <ControlButton :minValue="1" :maxValue="30">мин</ControlButton>
         </div>
       </div>
@@ -28,20 +28,20 @@
             :style="{ transitionDuration: this.setings.inhale + 's' }"
           ></div> -->
           <div
-            v-show="startFlag"
+            v-if="startFlag"
             class="bg-inhale"
             :style="{ transitionDuration: this.setings.inhale + 's' }"
           ></div>
         </transition>
       </div>
       <div class="exhalation" :style="{ flexGrow: exhalationStyle }">
-        <transition name="start" @after-enter="afterEnter">
+        <transition name="start" @after-enter="afterEnterTwo">
           <!-- <div v-show="startFlag"
             :class="['bg-inhale', { start_bg_inhale: startFlag }]"
             :style="{ transitionDuration: this.setings.inhale + 's' }"
           ></div> -->
           <div
-            v-show="startFlagTwo"
+            v-if="startFlagTwo"
             class="bg-inhale-2"
             :style="{
               transitionDuration: this.setings.pda - this.setings.inhale + 's',
@@ -51,7 +51,7 @@
         <!-- <div :class="['bg-inhale-2', {}]"></div> -->
       </div>
     </div>
-    <div class="start" @click="start()">начать</div>
+    <div class="start"><div class="button" @click="start()">Начать</div></div>
   </div>
 </template>
 
@@ -67,7 +67,7 @@ export default {
       startFlagTwo: false,
       setings: {
         pda: 7,
-        inhale: 1,
+        inhale: 2,
       },
     };
   },
@@ -91,8 +91,14 @@ export default {
     },
     // ==============
     afterEnter() {
-      console.log("появился");
       this.startFlagTwo = true;
+    },
+    afterEnterTwo() {
+      this.startFlagTwo = false;
+      this.startFlag = false;
+      // this.startFlag = true;
+      setTimeout(this.start, 0)
+      
     },
   },
   components: { ControlButton },
@@ -119,17 +125,17 @@ export default {
 // .start-leave-active {
 //   transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 // }
-// .start-enter, .start-leave-to
-// /* .slide-fade-leave-active до версии 2.1.8 */ {
-//   transform: translateX(10px);
-//   opacity: 0;
-// }
+.start-leave-active{
+  transition-duration: 0s !important; 
+}
 .title {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   margin-bottom: 0.9em;
-  // justify-content: flex-start;
+  .head {
+    display: flex;
+    align-items: flex-start;
+  }
   > div {
     margin-bottom: 0.4em;
   }
@@ -175,19 +181,14 @@ export default {
 }
 
 .start {
-  cursor: pointer;
   margin: 2em;
+  display: flex;
+  justify-content: center;
+  .button {
+    cursor: pointer;
+    padding: 0.3em 1em;
+    border: 1px solid gray;
+    border-radius: 5px;
+  }
 }
-// @keyframes start_bg_inhale {
-//   0% {
-//     .bg_inhale {
-//       width: 100%;
-//     }
-//   }
-//   50% {
-//     .bg_inhale-2 {
-//       width: 100%;
-//     }
-//   }
-// }
 </style>

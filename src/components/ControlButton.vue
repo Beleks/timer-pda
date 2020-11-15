@@ -68,6 +68,7 @@ export default {
 <style lang="scss" scoped>
 .main {
   display: flex;
+  justify-content: space-between;
 }
 .input-block {
   position: relative;
