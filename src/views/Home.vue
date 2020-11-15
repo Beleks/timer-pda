@@ -99,24 +99,18 @@ export default {
 
       let timer = setInterval(function () {
         // console.log();
-        console.log(scope.startFlag, "startFlag");
-
         if (scope.current === 1) {
           clearInterval(timer);
           scope.startFlag = true;
           scope.startClick = true;
           let timerClok = scope.setings.time * 1000;
-          console.log(scope.setings.time * 1000);
           setTimeout(() => {
-            // startClick: false,
-            // timer: false,
-            // startFlag: false,
-            // startFlagTwo: false,
             console.log("конец");
             scope.startClick = false;
             scope.timer = false;
             scope.startFlag = false;
             scope.startFlagTwo = false;
+            scope.current = 3;
           }, timerClok);
         }
         scope.current--;
