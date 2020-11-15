@@ -20,7 +20,11 @@
         </div>
       </div>
     </div>
-    <div class="scale">
+    <div v-if="!startClick" class="start_block" @click="start()">
+      <div v-if="timer">{{ current }}</div>
+      <div v-else>Начать</div>
+    </div>
+    <div v-show="startFlag" class="scale">
       <div class="inhale" :style="{ flexGrow: inhaleStyle }">
         <transition name="start" @after-enter="afterEnter">
           <!-- <div v-show="startFlag"
@@ -51,7 +55,7 @@
         <!-- <div :class="['bg-inhale-2', {}]"></div> -->
       </div>
     </div>
-    <div class="start"><div class="button" @click="start()">Начать</div></div>
+    <!-- <div class="start"><div class="button" >Начать</div></div> -->
   </div>
 </template>
 
@@ -63,8 +67,11 @@ export default {
   name: "Home",
   data: () => {
     return {
+      startClick: false,
+      timer: false,
       startFlag: false,
       startFlagTwo: false,
+      current: 3,
       setings: {
         pda: 7,
         inhale: 2,
@@ -81,7 +88,24 @@ export default {
   },
   methods: {
     start() {
-      this.startFlag = true;
+      // this.startClick = true;
+      // let  = this.current;
+      // console.log(number);
+      this.timer = true;
+      let scope = this;
+
+      let timer = setInterval(function () {
+        // console.log();
+        console.log(scope.startFlag, "startFlag");
+
+        if (scope.current === 1) {
+          clearInterval(timer);
+          scope.startFlag = true;
+          scope.startClick = true;
+        }
+        scope.current--;
+      }, 1000);
+      // setTimeout();
     },
     pda(value) {
       this.setings.pda = value;
@@ -97,8 +121,9 @@ export default {
       this.startFlagTwo = false;
       this.startFlag = false;
       // this.startFlag = true;
-      setTimeout(this.start, 0)
-      
+      setTimeout(() => {
+        this.startFlag = true;
+      }, 0);
     },
   },
   components: { ControlButton },
@@ -106,6 +131,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.start_block {
+  display: flex;
+  align-items: center;
+  border: 1px solid gray;
+  border-radius: 5px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+}
 .start-enter-active {
   // transition: all 0.3s ease;
   // transition-timing-function: linear;
@@ -125,8 +159,8 @@ export default {
 // .start-leave-active {
 //   transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 // }
-.start-leave-active{
-  transition-duration: 0s !important; 
+.start-leave-active {
+  transition-duration: 0s !important;
 }
 .title {
   display: flex;
