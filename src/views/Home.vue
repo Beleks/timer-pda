@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="settings">
+    <div class="settings_box">
       <div>
         <div class="title">
           <div class="head">ПДА</div>
@@ -22,39 +22,42 @@
         </div>
       </div>
     </div>
-    <div v-if="!startClick" class="start_block" @click="start()">
-      <div v-if="timer">{{ current }}</div>
-      <div v-else>Начать</div>
-    </div>
-    <div v-show="startFlag" class="scale">
-      <div class="inhale" :style="{ flexGrow: inhaleStyle }">
-        <transition name="start" @after-enter="afterEnter">
-          <!-- <div v-show="startFlag"
-            :class="['bg-inhale', { start_bg_inhale: startFlag }]"
-            :style="{ transitionDuration: this.setings.inhale + 's' }"
-          ></div> -->
-          <div
-            v-if="startFlag"
-            class="bg-inhale"
-            :style="{ transitionDuration: this.setings.inhale + 's' }"
-          ></div>
-        </transition>
+    <div class="start_box">
+      <div v-if="!startClick" class="start_block" @click="start()">
+        <div v-if="timer">{{ current }}</div>
+        <div v-else>Начать</div>
       </div>
-      <div class="exhalation" :style="{ flexGrow: exhalationStyle }">
-        <transition name="start" @after-enter="afterEnterTwo">
-          <!-- <div v-show="startFlag"
+      <div v-show="startFlag" class="scale">
+        <div class="inhale" :style="{ flexGrow: inhaleStyle }">
+          <transition name="start" @after-enter="afterEnter">
+            <!-- <div v-show="startFlag"
             :class="['bg-inhale', { start_bg_inhale: startFlag }]"
             :style="{ transitionDuration: this.setings.inhale + 's' }"
           ></div> -->
-          <div
-            v-if="startFlagTwo"
-            class="bg-inhale-2"
-            :style="{
-              transitionDuration: this.setings.pda - this.setings.inhale + 's',
-            }"
-          ></div>
-        </transition>
-        <!-- <div :class="['bg-inhale-2', {}]"></div> -->
+            <div
+              v-if="startFlag"
+              class="bg-inhale"
+              :style="{ transitionDuration: this.setings.inhale + 's' }"
+            ></div>
+          </transition>
+        </div>
+        <div class="exhalation" :style="{ flexGrow: exhalationStyle }">
+          <transition name="start" @after-enter="afterEnterTwo">
+            <!-- <div v-show="startFlag"
+            :class="['bg-inhale', { start_bg_inhale: startFlag }]"
+            :style="{ transitionDuration: this.setings.inhale + 's' }"
+          ></div> -->
+            <div
+              v-if="startFlagTwo"
+              class="bg-inhale-2"
+              :style="{
+                transitionDuration:
+                  this.setings.pda - this.setings.inhale + 's',
+              }"
+            ></div>
+          </transition>
+          <!-- <div :class="['bg-inhale-2', {}]"></div> -->
+        </div>
       </div>
     </div>
     <!-- <div class="start"><div class="button" >Начать</div></div> -->
@@ -64,7 +67,12 @@
 <script>
 // import ControlButton from "@/components/ControlButton.vue";
 import ControlButton from "../components/ControlButton.vue";
-
+//=============
+// Плавное премещение scale наверх
+// Отоброжение времени
+// Пауза, завершение тренировки
+// Если время закончилось, а полоса не дошла, то не прекращать прогресс
+//=============
 export default {
   name: "Home",
   data: () => {
@@ -73,11 +81,11 @@ export default {
       timer: false,
       startFlag: false,
       startFlagTwo: false,
-      current: 3,
+      current: 5,
       setings: {
         pda: 7,
         inhale: 2,
-        time: 20,
+        time: 60,
       },
     };
   },
@@ -110,7 +118,7 @@ export default {
             scope.timer = false;
             scope.startFlag = false;
             scope.startFlagTwo = false;
-            scope.current = 3;
+            scope.current = 5;
           }, timerClok);
         }
         scope.current--;
@@ -152,6 +160,10 @@ export default {
   height: 40px;
   justify-content: center;
   align-items: center;
+  transition: background-color 1s ease-in-out;
+}
+.start_block:hover {
+  background-color: rgba(38, 166, 153, 0.5);
 }
 .start-enter-active {
   // transition: all 0.3s ease;
