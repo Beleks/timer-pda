@@ -78,7 +78,7 @@ export default {
   padding: 0 0.4em;
   border: 1px solid gray;
   border-radius: 5px;
-  width: 60px;
+  width: 70px;
   background-color: rgba(128, 128, 128, 0.1);
   .input-area {
     display: flex;
@@ -86,6 +86,7 @@ export default {
     input {
       width: 35px;
       // padding: 0.1em 0;
+      font-size: 1.1rem;
       padding: 0;
     }
   }
@@ -95,6 +96,7 @@ export default {
     display: flex;
     align-items: flex-end;
     opacity: 0.8;
+    font-size: 1.1rem;
   }
 }
 .change {
@@ -103,7 +105,7 @@ export default {
   > div {
     border: 1px solid gray;
     cursor: pointer;
-    padding: 0.2em 1em;
+    padding: 0.3em 1.4em;
   }
   .minus {
     border-radius: 5px 0 0 5px;

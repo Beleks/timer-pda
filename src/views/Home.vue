@@ -1,65 +1,74 @@
 <template>
   <div class="home">
-    <div class="settings_box">
-      <div>
-        <div class="title">
-          <div class="head">ПДА</div>
-          <ControlButton :minValue="7" :maxValue="999" @changeParams="pda"
-            >сек</ControlButton
-          >
-        </div>
-        <div class="title">
-          <div class="head">Вдох</div>
-          <ControlButton :minValue="2" :maxValue="6" @changeParams="inhale"
-            >сек</ControlButton
-          >
-        </div>
-        <div class="title">
-          <div class="head">Продолжительность занятия</div>
-          <ControlButton :minValue="1" :maxValue="30" @changeParams="time"
-            >мин</ControlButton
-          >
+    <div class="head_block">
+      <div class="settings_box" v-show="!this.timer">
+        <div>
+          <div class="title">
+            <div class="head">ПДА</div>
+            <ControlButton :minValue="7" :maxValue="999" @changeParams="pda"
+              >сек</ControlButton
+            >
+          </div>
+          <div class="title">
+            <div class="head">Вдох</div>
+            <ControlButton :minValue="2" :maxValue="6" @changeParams="inhale"
+              >сек</ControlButton
+            >
+          </div>
+          <div class="title">
+            <div class="head">Продолжительность занятия</div>
+            <ControlButton :minValue="1" :maxValue="30" @changeParams="time"
+              >мин</ControlButton
+            >
+          </div>
         </div>
       </div>
-    </div>
-    <div class="start_box">
-      <div v-if="!startClick" class="start_block" @click="start()">
-        <div v-if="timer">{{ current }}</div>
-        <div v-else>Начать</div>
-      </div>
-      <div v-show="startFlag" class="scale">
-        <div class="inhale" :style="{ flexGrow: inhaleStyle }">
-          <transition name="start" @after-enter="afterEnter">
-            <!-- <div v-show="startFlag"
+      <div class="start_box">
+        <div v-if="!startClick" class="start_block" @click="start()">
+          <div v-if="timer">{{ current }}</div>
+          <div v-else>Начать</div>
+        </div>
+        <div v-show="startFlag" class="scale">
+          <div class="inhale" :style="{ flexGrow: inhaleStyle }">
+            <transition name="start" @after-enter="afterEnter">
+              <!-- <div v-show="startFlag"
             :class="['bg-inhale', { start_bg_inhale: startFlag }]"
             :style="{ transitionDuration: this.setings.inhale + 's' }"
           ></div> -->
-            <div
-              v-if="startFlag"
-              class="bg-inhale"
-              :style="{ transitionDuration: this.setings.inhale + 's' }"
-            ></div>
-          </transition>
-        </div>
-        <div class="exhalation" :style="{ flexGrow: exhalationStyle }">
-          <transition name="start" @after-enter="afterEnterTwo">
-            <!-- <div v-show="startFlag"
+              <div
+                v-if="startFlag"
+                class="bg-inhale"
+                :style="{ transitionDuration: this.setings.inhale + 's' }"
+              ></div>
+            </transition>
+          </div>
+          <div class="exhalation" :style="{ flexGrow: exhalationStyle }">
+            <transition name="start" @after-enter="afterEnterTwo">
+              <!-- <div v-show="startFlag"
             :class="['bg-inhale', { start_bg_inhale: startFlag }]"
             :style="{ transitionDuration: this.setings.inhale + 's' }"
           ></div> -->
-            <div
-              v-if="startFlagTwo"
-              class="bg-inhale-2"
-              :style="{
-                transitionDuration:
-                  this.setings.pda - this.setings.inhale + 's',
-              }"
-            ></div>
-          </transition>
-          <!-- <div :class="['bg-inhale-2', {}]"></div> -->
+              <div
+                v-if="startFlagTwo"
+                class="bg-inhale-2"
+                :style="{
+                  transitionDuration:
+                    this.setings.pda - this.setings.inhale + 's',
+                }"
+              ></div>
+            </transition>
+            <!-- <div :class="['bg-inhale-2', {}]"></div> -->
+          </div>
+        </div>
+        <div class="play_panel">
+          <div class="time">{{ checkTime | timeFilter }}</div>
+          <div class="play_block">
+            <div class="">пауза</div>
+          </div>
         </div>
       </div>
     </div>
+    <div class="footer_block">0.2.4v beta</div>
     <!-- <div class="start"><div class="button" >Начать</div></div> -->
   </div>
 </template>
@@ -72,6 +81,7 @@ import ControlButton from "../components/ControlButton.vue";
 // Отоброжение времени
 // Пауза, завершение тренировки
 // Если время закончилось, а полоса не дошла, то не прекращать прогресс
+// transition: transform 1s;
 //=============
 export default {
   name: "Home",
@@ -87,14 +97,15 @@ export default {
         inhale: 2,
         time: 60,
       },
+      checkTime: 60,
     };
   },
   computed: {
     inhaleStyle() {
-      return (1 / this.setings.pda) * this.setings.inhale;
+      return ((1 / this.setings.pda) * this.setings.inhale).toPrecision(2);
     },
     exhalationStyle() {
-      return 1 - this.inhaleStyle;
+      return (1 - this.inhaleStyle).toPrecision(2);
     },
   },
   methods: {
@@ -111,15 +122,34 @@ export default {
           clearInterval(timer);
           scope.startFlag = true;
           scope.startClick = true;
+          // scope.timer = false // ! метка
           let timerClok = scope.setings.time * 1000;
-          setTimeout(() => {
-            console.log("конец");
-            scope.startClick = false;
-            scope.timer = false;
-            scope.startFlag = false;
-            scope.startFlagTwo = false;
-            scope.current = 5;
-          }, timerClok);
+          let index = scope.setings.time;
+          index--;
+          scope.checkTime = index;
+          console.log("начал отсчет");
+          let countdown = setInterval(function () {
+            index--;
+            scope.checkTime = index;
+            if (index === 0) {
+              clearInterval(countdown);
+              console.log("конец");
+              scope.startClick = false;
+              scope.timer = false;
+              scope.startFlag = false;
+              scope.startFlagTwo = false;
+              scope.current = 5;
+            }
+          }, 1000);
+
+          // setTimeout(() => {
+          //   console.log("конец");
+          //   scope.startClick = false;
+          //   scope.timer = false;
+          //   scope.startFlag = false;
+          //   scope.startFlagTwo = false;
+          //   scope.current = 5;
+          // }, timerClok);
         }
         scope.current--;
       }, 1000);
@@ -147,20 +177,76 @@ export default {
       }, 0);
     },
   },
+  filters: {
+    timeFilter: function (value) {
+      // console.log(value, "value");
+      let minutes = Math.trunc(value / 60);
+      let sec;
+      // console.log(minutes, "мин");
+      if (value / 60 < 1) {
+        sec = value;
+        // return value
+      } else {
+        sec = value - minutes * 60;
+      }
+      // let sec = (value / 60 + "").split(".")[1];
+      // console.log(sec, "sec");
+      return `${minutes}:${sec}`;
+    },
+  },
   components: { ControlButton },
 };
 </script>
 
 <style lang="scss" scoped>
+.home {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  // min-height: 100%;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  // .head_block{
+  // }
+  .footer_block {
+    display: flex;
+    justify-content: flex-end;
+    opacity: 0.5;
+  }
+}
+
+// New
+.play_panel {
+  padding: 0.7em 1em;
+  display: flex;
+  justify-content: space-between;
+}
+
+// =================================================
+.start_block_t-move {
+  transition: transform 1s;
+}
+.settings_box {
+  // position: absolute;
+}
+.start_box {
+  margin-top: 1em;
+}
 .start_block {
+  cursor: pointer;
   display: flex;
   align-items: center;
   border: 1px solid gray;
   border-radius: 5px;
+  //
   height: 40px;
   justify-content: center;
   align-items: center;
-  transition: background-color 1s ease-in-out;
+  transition: background-color 0.3s ease-in-out;
 }
 .start_block:hover {
   background-color: rgba(38, 166, 153, 0.5);
@@ -194,6 +280,7 @@ export default {
   .head {
     display: flex;
     align-items: flex-start;
+    font-size: 1.1rem;
   }
   > div {
     margin-bottom: 0.4em;
@@ -201,10 +288,10 @@ export default {
 }
 .scale {
   display: flex;
-  height: 40px;
+  // height: 40px;
   > div {
     border: 1px solid gray;
-    height: 40px;
+    height: 39px;
   }
   .inhale {
     border-radius: 5px 0 0 5px;
@@ -221,7 +308,7 @@ export default {
   border: none;
   border-radius: 5px 0 0 5px;
   background-color: rgba(38, 166, 153, 0.8);
-  height: 40px;
+  height: 39px;
   // width: 0%;
   transition-timing-function: linear;
   transition-property: width;
@@ -231,7 +318,7 @@ export default {
   border: none;
   border-radius: 0 5px 5px 0;
   background-color: rgba(239, 83, 80, 0.5);
-  height: 40px;
+  height: 39px;
   // width: 0%;
   transition: width 6s linear;
 }

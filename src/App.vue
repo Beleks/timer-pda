@@ -33,10 +33,16 @@ input {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  // убираем сини фон при клике 
+  // убираем сини фон при клике
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  box-sizing: border-box;
+  // ===============
+  min-height: 100vh;
 }
-
+body {
+  margin: 0;
+  padding: 0;
+}
 // #nav {
 //   padding: 30px;
 
