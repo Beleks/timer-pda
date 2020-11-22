@@ -1,17 +1,17 @@
 <template>
   <div class="home">
     <div class="head_block">
-      <div class="settings_box" v-show="!this.timer">
+      <div class="settings_box" v-show="!training">
         <div>
           <div class="title">
             <div class="head">ПДА</div>
-            <ControlButton :minValue="7" :maxValue="999" @changeParams="pda"
+            <ControlButton :minValue="7" :maxValue="999" @change-params="pda"
               >сек</ControlButton
             >
           </div>
           <div class="title">
             <div class="head">Вдох</div>
-            <ControlButton :minValue="2" :maxValue="6" @changeParams="inhale"
+            <ControlButton :minValue="2" :maxValue="6" @change-params="inhale"
               >сек</ControlButton
             >
           </div>
@@ -31,7 +31,7 @@
       <div class="start_box">
         <!-- time -->
         <div class="time">
-          <div v-if="!timer">
+          <div v-if="!training">
             Времени займет:
             {{ (this.setings.pda * this.setings.loop) | timeFilter }}
           </div>
@@ -74,16 +74,16 @@
             <!-- <div :class="['bg-inhale-2', {}]"></div> -->
           </div>
         </div>
-        <div class="play_panel" v-show="this.timer">
+        <div class="play_panel" v-show="training">
           <div class="loop">Осталось циклов: {{ this.checkLoop }}</div>
-          <div class="play_block">
+          <div class="play_block" v-show="!this.timer">
             <div class="pause" v-if="!stopButton" @click="stop">Стоп</div>
             <div class="pause" v-else @click="proceed">Продолжить</div>
           </div>
         </div>
       </div>
     </div>
-    <div class="footer_block">0.2.6v beta</div>
+    <div class="footer_block">0.2.7v beta</div>
     <!-- <div class="start"><div class="button" >Начать</div></div> -->
   </div>
 </template>
@@ -92,17 +92,17 @@
 // import ControlButton from "@/components/ControlButton.vue";
 import ControlButton from "../components/ControlButton.vue";
 //=============
-// Плавное премещение scale наверх
-// Отоброжение времени
+// Плавное премещение scale наверх?
 // Пауза, завершение тренировки
-// Если время закончилось, а полоса не дошла, то не прекращать прогресс
-// transition: transform 1s;
+// Убрать моргание при паузе
+
 //=============
 export default {
   name: "Home",
   data: () => {
     return {
       startClick: false, // ?
+      training: false, // статус тренировки
       timer: false,
       startFlag: false,
       startFlagTwo: false,
@@ -140,9 +140,7 @@ export default {
       this.stopButton = false;
     },
     start() {
-      // this.startClick = true;
-      // let  = this.current;
-      // console.log(number);
+      this.training = true;
       this.timer = true;
       let scope = this;
       scope.checkLoop = scope.setings.loop;
@@ -156,38 +154,13 @@ export default {
           // index--;
           // scope.checkTime = index;
           console.log("начал отсчет");
-          // let countdown = setInterval(function () {
-          //   index--;
-          //   scope.checkTime = index;
-          //   if (index === 0) {
-          //     clearInterval(countdown);
-          //     console.log("конец");
-          //     scope.startClick = false;
-          //     scope.timer = false;
-          //     scope.startFlag = false;
-          //     scope.startFlagTwo = false;
-          //     scope.current = 5;
-          //   }
-          // }, 1000);
           // ==================================!!!!!!!!!!!!!!!!!!!!!!!!
           let index = scope.setings.time;
           // index--;
           // scope.checkTime = index;
           scope.startClick = true;
           scope.startFlag = true;
-          setTimeout(function run() {
-            index--;
-            scope.checkTime = index;
-            if (index === 0) {
-              scope.startClick = false;
-              scope.timer = false;
-              scope.startFlag = false;
-              scope.startFlagTwo = false;
-              scope.current = 5;
-            } else {
-              setTimeout(run, 1000);
-            }
-          }, 1000);
+          scope.timer = false;
           // ==================================!!!!!!!!!!!!!!!!!!!!!!!!
 
           // setTimeout(() => {
@@ -233,6 +206,7 @@ export default {
           this.startFlag = true;
         }, 0);
       } else {
+        this.training = false;
         this.startClick = false;
         this.timer = false;
         this.current = 5;
@@ -300,6 +274,7 @@ export default {
   // .head_block{
   // }
   .footer_block {
+    user-select: none;
     display: flex;
     justify-content: flex-end;
     opacity: 0.5;
@@ -308,15 +283,25 @@ export default {
 
 // New
 .play_panel {
-  padding: 0.7em 0;
+  margin: 0.7em 0;
+  // height: 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .time {
   text-align: start;
   margin-bottom: 0.3em;
   opacity: 0.8;
+}
+.loop {
+  padding: 0.2em 0;
+  border: 1px solid white;
+  border-radius: 5px;
+}
+.none {
+  opacity: 0;
 }
 .pause {
   padding: 0.2em 0.8em;
@@ -336,7 +321,7 @@ export default {
   border: 1px solid gray;
   border-radius: 5px;
   //
-  height: 40px;
+  height: 39px;
   justify-content: center;
   align-items: center;
   transition: background-color 0.3s ease-in-out;
@@ -382,7 +367,7 @@ export default {
 }
 .scale {
   display: flex;
-  // height: 40px;
+  // height: 39px;
   > div {
     border: 1px solid gray;
     height: 39px;

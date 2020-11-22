@@ -5,12 +5,13 @@
         <input
           type="text"
           v-model="time"
+          :input="$emit('change-params', time)"
           onkeyup="this.value = this.value.replace(/[^\d]/g,'');"
         />
       </div>
       <div class="sec"><slot></slot></div>
     </div>
-    <div class="change">
+    <div class="change" >
       <div class="minus" @click="minus()">-</div>
       <div class="plus" @click="plus()">+</div>
     </div>
@@ -56,13 +57,13 @@ export default {
     plus() {
       if (this.t < this.maxValue) {
         this.t++;
-        this.$emit("changeParams", this.t);
+        // this.$emit("changeParams", this.t);
       }
     },
     minus() {
       if (this.t > this.minValue) {
         this.t--;
-        this.$emit("changeParams", this.t);
+        // this.$emit("changeParams", this.t);
       }
     },
   },
