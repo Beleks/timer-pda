@@ -16,14 +16,28 @@
             >
           </div>
           <div class="title">
-            <div class="head">Продолжительность занятия</div>
-            <ControlButton :minValue="1" :maxValue="30" @changeParams="time"
-              >мин</ControlButton
-            >
+            <div class="head">
+              Продолжительность занятия <br />
+              (в циклах)
+            </div>
+            <ControlButton
+              :minValue="1"
+              :maxValue="30"
+              @changeParams="loop"
+            ></ControlButton>
           </div>
         </div>
       </div>
       <div class="start_box">
+        <!-- time -->
+        <div class="time">
+          <div v-if="!timer">
+            Времени займет:
+            {{ (this.setings.pda * this.setings.loop) | timeFilter }}
+          </div>
+          <!-- <div>Осталось меньше 1 минуты</div> -->
+        </div>
+        <!-- time -->
         <div v-if="!startClick" class="start_block" @click="start()">
           <div v-if="timer">{{ current }}</div>
           <div v-else>Начать</div>
@@ -60,15 +74,15 @@
             <!-- <div :class="['bg-inhale-2', {}]"></div> -->
           </div>
         </div>
-        <div class="play_panel">
-          <div class="time">{{ checkTime | timeFilter }}</div>
+        <div class="play_panel" v-show="this.timer">
+          <div class="loop">Осталось циклов: {{ this.checkLoop }}</div>
           <div class="play_block">
-            <div class="">пауза</div>
+            <div class="pause">Стоп</div>
           </div>
         </div>
       </div>
     </div>
-    <div class="footer_block">0.2.4v beta</div>
+    <div class="footer_block">0.2.5v beta</div>
     <!-- <div class="start"><div class="button" >Начать</div></div> -->
   </div>
 </template>
@@ -95,9 +109,10 @@ export default {
       setings: {
         pda: 7,
         inhale: 2,
-        time: 60,
+        loop: 1,
       },
-      checkTime: 60,
+      checkLoop: 1,
+      // loop: 0,
     };
   },
   computed: {
@@ -115,32 +130,50 @@ export default {
       // console.log(number);
       this.timer = true;
       let scope = this;
-
+      scope.checkLoop = scope.setings.loop;
       let timer = setInterval(function () {
         // console.log();
         if (scope.current === 1) {
           clearInterval(timer);
-          scope.startFlag = true;
-          scope.startClick = true;
+
           // scope.timer = false // ! метка
           let timerClok = scope.setings.time * 1000;
-          let index = scope.setings.time;
-          index--;
-          scope.checkTime = index;
+          // index--;
+          // scope.checkTime = index;
           console.log("начал отсчет");
-          let countdown = setInterval(function () {
+          // let countdown = setInterval(function () {
+          //   index--;
+          //   scope.checkTime = index;
+          //   if (index === 0) {
+          //     clearInterval(countdown);
+          //     console.log("конец");
+          //     scope.startClick = false;
+          //     scope.timer = false;
+          //     scope.startFlag = false;
+          //     scope.startFlagTwo = false;
+          //     scope.current = 5;
+          //   }
+          // }, 1000);
+          // ==================================!!!!!!!!!!!!!!!!!!!!!!!!
+          let index = scope.setings.time;
+          // index--;
+          // scope.checkTime = index;
+          scope.startClick = true;
+          scope.startFlag = true;
+          setTimeout(function run() {
             index--;
             scope.checkTime = index;
             if (index === 0) {
-              clearInterval(countdown);
-              console.log("конец");
               scope.startClick = false;
               scope.timer = false;
               scope.startFlag = false;
               scope.startFlagTwo = false;
               scope.current = 5;
+            } else {
+              setTimeout(run, 1000);
             }
           }, 1000);
+          // ==================================!!!!!!!!!!!!!!!!!!!!!!!!
 
           // setTimeout(() => {
           //   console.log("конец");
@@ -149,6 +182,7 @@ export default {
           //   scope.startFlag = false;
           //   scope.startFlagTwo = false;
           //   scope.current = 5;
+          //   console.log(scope.checkTime, "время окончания");
           // }, timerClok);
         }
         scope.current--;
@@ -161,34 +195,72 @@ export default {
     inhale(value) {
       this.setings.inhale = value;
     },
-    time(value) {
-      this.setings.time = value * 60;
+    loop(value) {
+      this.setings.loop = value;
     },
     // ==============
     afterEnter() {
+      // console.log("вызвали получается");
+      // if (this.startFlagTwo) {
+      //   this.startFlag = true;
+      // } else {
+      // }
       this.startFlagTwo = true;
     },
     afterEnterTwo() {
       this.startFlagTwo = false;
       this.startFlag = false;
       // this.startFlag = true;
-      setTimeout(() => {
-        this.startFlag = true;
-      }, 0);
+      // this.afterEnter()
+      this.checkLoop--;
+      if (this.checkLoop !== 0) {
+        setTimeout(() => {
+          this.startFlag = true;
+        }, 0);
+      } else {
+        this.startClick = false;
+        this.timer = false;
+        this.current = 5;
+      }
     },
   },
   filters: {
     timeFilter: function (value) {
       // console.log(value, "value");
-      let minutes = Math.trunc(value / 60);
+      let minutes;
       let sec;
-      // console.log(minutes, "мин");
-      if (value / 60 < 1) {
+      //
+      //
+      //
+      if (value < 60) {
+        minutes = 0;
         sec = value;
-        // return value
+        if (sec < 10) {
+          sec = `0${sec}`;
+        }
       } else {
+        minutes = Math.trunc(value / 60);
         sec = value - minutes * 60;
+        if (sec < 10) {
+          sec = `0${sec}`;
+        }
       }
+      // if (value / 60 < 1) {
+      //   if (value / 60 < 0.1) {
+      //     sec = `0${value}`;
+      //     console.log(sec, "sec");
+      //   } else {
+      //     sec = value - minutes * 60;
+      //   }
+      //   // return value
+      // } else {
+      //   if (value < 10) {
+      //     sec = `0${value}`;
+      //     console.log(sec, "sec");
+      //   } else {
+      //     sec = value - minutes * 60;
+      //   }
+      // }
       // let sec = (value / 60 + "").split(".")[1];
       // console.log(sec, "sec");
       return `${minutes}:${sec}`;
@@ -221,18 +293,23 @@ export default {
 
 // New
 .play_panel {
-  padding: 0.7em 1em;
+  padding: 0.7em 0;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+}
+.time {
+  text-align: start;
+  margin-bottom: 0.3em;
+  opacity: 0.8;
+}
+.pause {
+  padding: 0.2em 0.8em;
+  border: 1px solid gray;
+  border-radius: 5px;
 }
 
 // =================================================
-.start_block_t-move {
-  transition: transform 1s;
-}
-.settings_box {
-  // position: absolute;
-}
 .start_box {
   margin-top: 1em;
 }
@@ -278,8 +355,9 @@ export default {
   flex-direction: column;
   margin-bottom: 0.9em;
   .head {
-    display: flex;
-    align-items: flex-start;
+    // display: flex;
+    // align-items: flex-start;
+    text-align: start;
     font-size: 1.1rem;
   }
   > div {
