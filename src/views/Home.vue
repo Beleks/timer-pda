@@ -42,7 +42,7 @@
           <div v-if="timer">{{ current }}</div>
           <div v-else>Начать</div>
         </div>
-        <div v-show="startFlag" class="scale">
+        <div v-show="startClick" class="scale">
           <div class="inhale" :style="{ flexGrow: inhaleStyle }">
             <transition name="start" @after-enter="afterEnter">
               <!-- <div v-show="startFlag"
@@ -77,12 +77,13 @@
         <div class="play_panel" v-show="this.timer">
           <div class="loop">Осталось циклов: {{ this.checkLoop }}</div>
           <div class="play_block">
-            <div class="pause">Стоп</div>
+            <div class="pause" v-if="!stopButton" @click="stop">Стоп</div>
+            <div class="pause" v-else @click="proceed">Продолжить</div>
           </div>
         </div>
       </div>
     </div>
-    <div class="footer_block">0.2.5v beta</div>
+    <div class="footer_block">0.2.6v beta</div>
     <!-- <div class="start"><div class="button" >Начать</div></div> -->
   </div>
 </template>
@@ -101,7 +102,7 @@ export default {
   name: "Home",
   data: () => {
     return {
-      startClick: false,
+      startClick: false, // ?
       timer: false,
       startFlag: false,
       startFlagTwo: false,
@@ -112,6 +113,7 @@ export default {
         loop: 1,
       },
       checkLoop: 1,
+      stopButton: false,
       // loop: 0,
     };
   },
@@ -124,6 +126,19 @@ export default {
     },
   },
   methods: {
+    stop() {
+      // scope.startClick = false;
+      // scope.timer = false;
+      this.stopButton = true;
+      this.startFlag = false;
+      this.startFlagTwo = false;
+      // scope.current = 5;
+    },
+    proceed() {
+      console.log("Продолжить");
+      this.startFlag = true;
+      this.stopButton = false;
+    },
     start() {
       // this.startClick = true;
       // let  = this.current;
@@ -307,6 +322,7 @@ export default {
   padding: 0.2em 0.8em;
   border: 1px solid gray;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 // =================================================

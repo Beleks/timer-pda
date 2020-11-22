@@ -2,7 +2,11 @@
   <div class="main">
     <div class="input-block">
       <div class="input-area">
-        <input type="text" v-model="time" />
+        <input
+          type="text"
+          v-model="time"
+          onkeyup="this.value = this.value.replace(/[^\d]/g,'');"
+        />
       </div>
       <div class="sec"><slot></slot></div>
     </div>
@@ -103,6 +107,7 @@ export default {
   margin-left: 1em;
   display: flex;
   > div {
+    user-select: none;
     border: 1px solid gray;
     cursor: pointer;
     padding: 0.3em 1.4em;
@@ -115,6 +120,12 @@ export default {
     border-left: none;
     border-radius: 0 5px 5px 0;
     background-color: rgba(38, 166, 153, 0.5);
+  }
+  .minus:active {
+    background-color: rgba(239, 83, 80, 1);
+  }
+  .plus:active {
+    background-color: rgba(38, 166, 153, 1);
   }
 }
 </style>
