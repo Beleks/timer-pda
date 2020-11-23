@@ -5,7 +5,6 @@
         <input
           type="text"
           v-model="time"
-          :input="$emit('change-params', this.t)"
           onkeyup="this.value = this.value.replace(/[^\d]/g,'');"
         />
       </div>
@@ -22,7 +21,8 @@
 // import { config } from "vue/types/umd";
 export default {
   props: {
-    valueP: Number,
+    objKey: String,
+    // valueP: Number,
     minValue: Number,
     maxValue: Number,
   },
@@ -33,19 +33,32 @@ export default {
         inhale: 2,
         loop: 6,
       },
-      t: -1,
+      t: 0,
     };
   },
   computed: {
     propsData() {},
     time: {
       get: function () {
-        let fromState = this.$store.state.defaultConfig
-        console.log(fromState.pda, 'status')
-        if(fromState.pda !== null){
-          // fromState 
-        }else{
-
+        let fromState = this.$store.state.defaultConfig;
+        // let fromState = {
+        //   pda: this.$store.state.defaultConfig.pda,
+        //   inhale: this.$store.state.defaultConfig.inhale,
+        //   loop: this.$store.state.defaultConfig.loop,
+        // };
+        // console.log(fromState[this.objKey], "status");
+        if (fromState[this.objKey] !== null) {
+          console.log(fromState[this.objKey], "status");
+          this.t = fromState[this.objKey];
+          return this.t;
+        } else {
+          this.t = this.default[this.objKey];
+          let obj = {
+            key: this.objKey,
+            value: this.t,
+          };
+          this.$store.commit("setConfig", obj);
+          return this.t;
         }
         // console.log(this.valueP, "valueP");
         // this.t = this.valueP;
@@ -53,7 +66,6 @@ export default {
       },
       set: function (value) {
         // toString(value);
-        console.log(value, "valueSet");
         if (value.length > 3) {
           this.t = 0;
           this.t = value.slice(0, 3);
@@ -61,6 +73,19 @@ export default {
         } else {
           this.t = value;
         }
+        console.log(value, "valueSet");
+        let obj = {
+          key: this.objKey,
+          value: this.t,
+        };
+        this.$store.commit("setConfig", obj);
+        // if (value.length > 3) {
+        //   this.t = 0;
+        //   this.t = value.slice(0, 3);
+        //   return;
+        // } else {
+        //   this.t = value;
+        // }
       },
     },
   },
@@ -69,13 +94,22 @@ export default {
     plus() {
       if (this.t < this.maxValue) {
         this.t++;
-        // this.$emit("changeParams", this.t);
+        let obj = {
+          key: this.objKey,
+          value: this.t,
+        };
+        console.log(obj);
+        this.$store.commit("setConfig", obj);
       }
     },
     minus() {
       if (this.t > this.minValue) {
         this.t--;
-        // this.$emit("changeParams", this.t);
+        let obj = {
+          key: this.objKey,
+          value: this.t,
+        };
+        this.$store.commit("setConfig", obj);
       }
     },
   },

@@ -5,21 +5,13 @@
         <div>
           <div class="title">
             <div class="head">ПДА</div>
-            <ControlButton
-              :minValue="7"
-              :maxValue="999"
-              @change-params="pda"
-              :valueP="Number(setings.pda)"
+            <ControlButton :minValue="7" :maxValue="999" :objKey="'pda'"
               >сек</ControlButton
             >
           </div>
           <div class="title">
             <div class="head">Вдох</div>
-            <ControlButton
-              :minValue="2"
-              :maxValue="6"
-              @change-params="inhale"
-              :valueP="Number(setings.inhale)"
+            <ControlButton :minValue="2" :maxValue="6" :objKey="'inhale'"
               >сек</ControlButton
             >
           </div>
@@ -31,8 +23,7 @@
             <ControlButton
               :minValue="1"
               :maxValue="30"
-              @change-params="loop"
-              :valueP="Number(setings.loop)"
+              :objKey="'loop'"
             ></ControlButton>
           </div>
         </div>
@@ -128,17 +119,21 @@ export default {
   },
   computed: {
     setings() {
-      let state = this.setingsData;
-      let pda;
-      let inhale;
-      let loop;
+      // let state = this.setingsData;
+      // let pda;
+      // let inhale;
+      // let loop;
       // =====================
-      let configState = this.$store.state.defaultConfig;
-      if (configState.pda !== null) {
-        return configState
-      }
-      
-      return state;
+      // let configState = this.$store.state.defaultConfig;
+      // // if (configState.pda !== null) {
+      // //   return configState;
+      // // }
+      // let conf = {
+      //   pda: configState.pda,
+      //   inhale: configState.inhale,
+      //   loop: configState.loop,
+      // };
+      return this.setingsData;
     },
     inhaleStyle() {
       return ((1 / this.setings.pda) * this.setings.inhale).toPrecision(2);
@@ -199,19 +194,19 @@ export default {
       }, 1000);
       // setTimeout();
     },
-    pda(value) {
-      console.log(value, 'set from child')
-      this.setingsData.pda = value;
-      // localStorage.setItem("pdaSetings", value);
-    },
-    inhale(value) {
-      this.setingsData.inhale = value;
-      // localStorage.setItem("inhaleSetings", value);
-    },
-    loop(value) {
-      this.setingsData.loop = value;
-      // localStorage.setItem("loopSetings", value);
-    },
+    // pda(value) {
+    //   console.log(value, "set from child");
+    //   this.setingsData.pda = value;
+    //   // localStorage.setItem("pdaSetings", value);
+    // },
+    // inhale(value) {
+    //   this.setingsData.inhale = value;
+    //   // localStorage.setItem("inhaleSetings", value);
+    // },
+    // loop(value) {
+    //   this.setingsData.loop = value;
+    //   // localStorage.setItem("loopSetings", value);
+    // },
     // ==============
     afterEnter() {
       // console.log("вызвали получается");
