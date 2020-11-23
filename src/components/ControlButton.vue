@@ -5,13 +5,13 @@
         <input
           type="text"
           v-model="time"
-          :input="$emit('change-params', time)"
+          :input="$emit('change-params', this.t)"
           onkeyup="this.value = this.value.replace(/[^\d]/g,'');"
         />
       </div>
       <div class="sec"><slot></slot></div>
     </div>
-    <div class="change" >
+    <div class="change">
       <div class="minus" @click="minus()">-</div>
       <div class="plus" @click="plus()">+</div>
     </div>
@@ -19,29 +19,41 @@
 </template>
 
 <script>
+// import { config } from "vue/types/umd";
 export default {
   props: {
+    valueP: Number,
     minValue: Number,
     maxValue: Number,
   },
   data: () => {
     return {
+      default: {
+        pda: 15,
+        inhale: 2,
+        loop: 6,
+      },
       t: -1,
     };
   },
   computed: {
+    propsData() {},
     time: {
       get: function () {
-        console.log(this.t);
-        if (this.t === -1) {
-          this.t = this.minValue;
-          return this.t;
-        } else {
-          return this.t;
+        let fromState = this.$store.state.defaultConfig
+        console.log(fromState.pda, 'status')
+        if(fromState.pda !== null){
+          // fromState 
+        }else{
+
         }
+        // console.log(this.valueP, "valueP");
+        // this.t = this.valueP;
+        // return this.t;
       },
       set: function (value) {
         // toString(value);
+        console.log(value, "valueSet");
         if (value.length > 3) {
           this.t = 0;
           this.t = value.slice(0, 3);

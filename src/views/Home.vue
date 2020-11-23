@@ -5,13 +5,21 @@
         <div>
           <div class="title">
             <div class="head">ПДА</div>
-            <ControlButton :minValue="7" :maxValue="999" @change-params="pda"
+            <ControlButton
+              :minValue="7"
+              :maxValue="999"
+              @change-params="pda"
+              :valueP="Number(setings.pda)"
               >сек</ControlButton
             >
           </div>
           <div class="title">
             <div class="head">Вдох</div>
-            <ControlButton :minValue="2" :maxValue="6" @change-params="inhale"
+            <ControlButton
+              :minValue="2"
+              :maxValue="6"
+              @change-params="inhale"
+              :valueP="Number(setings.inhale)"
               >сек</ControlButton
             >
           </div>
@@ -23,7 +31,8 @@
             <ControlButton
               :minValue="1"
               :maxValue="30"
-              @changeParams="loop"
+              @change-params="loop"
+              :valueP="Number(setings.loop)"
             ></ControlButton>
           </div>
         </div>
@@ -107,10 +116,10 @@ export default {
       startFlag: false,
       startFlagTwo: false,
       current: 5,
-      setings: {
-        pda: 7,
+      setingsData: {
+        pda: 15,
         inhale: 2,
-        loop: 1,
+        loop: 6,
       },
       checkLoop: 1,
       stopButton: false,
@@ -118,6 +127,19 @@ export default {
     };
   },
   computed: {
+    setings() {
+      let state = this.setingsData;
+      let pda;
+      let inhale;
+      let loop;
+      // =====================
+      let configState = this.$store.state.defaultConfig;
+      if (configState.pda !== null) {
+        return configState
+      }
+      
+      return state;
+    },
     inhaleStyle() {
       return ((1 / this.setings.pda) * this.setings.inhale).toPrecision(2);
     },
@@ -178,13 +200,17 @@ export default {
       // setTimeout();
     },
     pda(value) {
-      this.setings.pda = value;
+      console.log(value, 'set from child')
+      this.setingsData.pda = value;
+      // localStorage.setItem("pdaSetings", value);
     },
     inhale(value) {
-      this.setings.inhale = value;
+      this.setingsData.inhale = value;
+      // localStorage.setItem("inhaleSetings", value);
     },
     loop(value) {
-      this.setings.loop = value;
+      this.setingsData.loop = value;
+      // localStorage.setItem("loopSetings", value);
     },
     // ==============
     afterEnter() {
