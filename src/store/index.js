@@ -12,9 +12,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    setConfig(state, obj){
+    setConfig(state, obj) {
       localStorage.setItem(obj.key, obj.value)
-      // state.defaultConfig[obj.key] = obj.value
+      state.defaultConfig[obj.key] = obj.value
     }
   },
   actions: {

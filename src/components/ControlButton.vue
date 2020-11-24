@@ -41,14 +41,7 @@ export default {
     time: {
       get: function () {
         let fromState = this.$store.state.defaultConfig;
-        // let fromState = {
-        //   pda: this.$store.state.defaultConfig.pda,
-        //   inhale: this.$store.state.defaultConfig.inhale,
-        //   loop: this.$store.state.defaultConfig.loop,
-        // };
-        // console.log(fromState[this.objKey], "status");
         if (fromState[this.objKey] !== null) {
-          console.log(fromState[this.objKey], "status");
           this.t = fromState[this.objKey];
           return this.t;
         } else {
@@ -60,32 +53,25 @@ export default {
           this.$store.commit("setConfig", obj);
           return this.t;
         }
-        // console.log(this.valueP, "valueP");
-        // this.t = this.valueP;
-        // return this.t;
       },
       set: function (value) {
-        // toString(value);
+        toString(value);
         if (value.length > 3) {
           this.t = 0;
           this.t = value.slice(0, 3);
-          return;
+          let obj = {
+            key: this.objKey,
+            value: this.t,
+          };
+          this.$store.commit("setConfig", obj);
         } else {
-          this.t = value;
+          this.t = value.replace(/[^\d]/g, "");
+          let obj = {
+            key: this.objKey,
+            value: this.t,
+          };
+          this.$store.commit("setConfig", obj);
         }
-        console.log(value, "valueSet");
-        let obj = {
-          key: this.objKey,
-          value: this.t,
-        };
-        this.$store.commit("setConfig", obj);
-        // if (value.length > 3) {
-        //   this.t = 0;
-        //   this.t = value.slice(0, 3);
-        //   return;
-        // } else {
-        //   this.t = value;
-        // }
       },
     },
   },

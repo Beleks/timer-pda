@@ -83,7 +83,7 @@
         </div>
       </div>
     </div>
-    <div class="footer_block">0.2.7v beta</div>
+    <div class="footer_block">0.3.0v beta</div>
     <!-- <div class="start"><div class="button" >Начать</div></div> -->
   </div>
 </template>
@@ -119,21 +119,7 @@ export default {
   },
   computed: {
     setings() {
-      // let state = this.setingsData;
-      // let pda;
-      // let inhale;
-      // let loop;
-      // =====================
-      // let configState = this.$store.state.defaultConfig;
-      // // if (configState.pda !== null) {
-      // //   return configState;
-      // // }
-      // let conf = {
-      //   pda: configState.pda,
-      //   inhale: configState.inhale,
-      //   loop: configState.loop,
-      // };
-      return this.setingsData;
+      return this.$store.state.defaultConfig;
     },
     inhaleStyle() {
       return ((1 / this.setings.pda) * this.setings.inhale).toPrecision(2);
