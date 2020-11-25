@@ -87,7 +87,7 @@
         </div> -->
       </div>
     </div>
-    <div class="footer_block">0.3.0v beta</div>
+    <div class="footer_block">0.3.4v beta</div>
     <!-- <div class="start"><div class="button" >Начать</div></div> -->
   </div>
 </template>
@@ -120,7 +120,7 @@ export default {
       stopButton: false,
       // ======================
       // testTime
-      // 
+      //
       // number: 0,
       // tweenedNumber: 0,
       // ======================
@@ -308,13 +308,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media (min-width: 600px) {
+  .home {
+    display: block;
+    width: 600px;
+  }
+}
+@media (max-width: 600px) {
+  .home {
+    position: absolute;
+  }
+}
 .home {
-  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  // min-height: 100%;
   padding: 0.5em;
   display: flex;
   flex-direction: column;
