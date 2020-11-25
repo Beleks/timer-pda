@@ -33,7 +33,7 @@
         <div class="time">
           <div v-if="!training">
             Времени займет:
-            {{ (this.setings.pda * this.setings.loop) | timeFilter }}
+            {{ timeInput | timeFilter }}
           </div>
           <!-- <div>Осталось меньше 1 минуты</div> -->
         </div>
@@ -121,6 +121,7 @@ export default {
       // testTime
       number: 0,
       tweenedNumber: 0,
+      timeInput: 0,
       // loop: 0,
     };
   },
@@ -129,7 +130,7 @@ export default {
       // gsap.to(this.$data, { duration: 0.5, tweenedNumber: newValue });
       let time = (500 * 1) / Math.abs(newValue - oldValue);
       let sum = Math.abs(newValue - oldValue) / 150;
-      // как только число меньше чем 
+      // как только число меньше чем
       console.log(sum, "sum");
       let state = this;
       function changeNumber(newValue) {
@@ -140,7 +141,7 @@ export default {
             clearInterval(timerId);
           }
         } else {
-          // при маленьких значениях прибавление 1 может быть лишним
+          // при маленьких значениях прибавление 1 может быть лишним из-за увелечение предпологаемой скорости
           state.tweenedNumber = state.tweenedNumber + sum;
           if (state.tweenedNumber >= newValue) {
             state.tweenedNumber = newValue;
@@ -155,11 +156,18 @@ export default {
     },
   },
   computed: {
+    // timeComuted() {
+    //   this.timeInput = this.setings.pda * this.setings.loop;
+    //   console.log(this.timeInput);
+    //   // return this.timeInput;
+    // },
     animatedNumber: function () {
       // return this.tweenedNumber
       return this.tweenedNumber.toFixed(0);
     },
     setings() {
+      this.setingsData = this.$store.state.defaultConfig;
+      this.timeComuted();
       return this.$store.state.defaultConfig;
     },
     inhaleStyle() {
@@ -170,6 +178,10 @@ export default {
     },
   },
   methods: {
+    timeComuted() {
+      this.timeInput = this.setingsData.pda * this.setingsData.loop;
+    },
+    toClock() {},
     stop() {
       // scope.startClick = false;
       // scope.timer = false;
@@ -263,12 +275,8 @@ export default {
   },
   filters: {
     timeFilter: function (value) {
-      // console.log(value, "value");
       let minutes;
       let sec;
-      //
-      //
-      //
       if (value < 60) {
         minutes = 0;
         sec = value;
@@ -282,24 +290,6 @@ export default {
           sec = `0${sec}`;
         }
       }
-      // if (value / 60 < 1) {
-      //   if (value / 60 < 0.1) {
-      //     sec = `0${value}`;
-      //     console.log(sec, "sec");
-      //   } else {
-      //     sec = value - minutes * 60;
-      //   }
-      //   // return value
-      // } else {
-      //   if (value < 10) {
-      //     sec = `0${value}`;
-      //     console.log(sec, "sec");
-      //   } else {
-      //     sec = value - minutes * 60;
-      //   }
-      // }
-      // let sec = (value / 60 + "").split(".")[1];
-      // console.log(sec, "sec");
       return `${minutes}:${sec}`;
     },
   },
