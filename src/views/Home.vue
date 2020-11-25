@@ -33,7 +33,7 @@
         <div class="time">
           <div v-if="!training">
             Времени займет:
-            {{ timeInput | timeFilter }}
+            {{ timeAnimated | timeFilter }}
           </div>
           <!-- <div>Осталось меньше 1 минуты</div> -->
         </div>
@@ -81,10 +81,10 @@
             <div class="pause" v-else @click="proceed">Продолжить</div>
           </div>
         </div>
-        <div>
+        <!-- <div>
           <input v-model.number="number" type="number" step="20" />
           <p>{{ animatedNumber }}</p>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="footer_block">0.3.0v beta</div>
@@ -118,33 +118,42 @@ export default {
       },
       checkLoop: 1,
       stopButton: false,
+      // ======================
       // testTime
-      number: 0,
-      tweenedNumber: 0,
+      // 
+      // number: 0,
+      // tweenedNumber: 0,
+      // ======================
+      // timeAnimated
+      //
       timeInput: 0,
+      timeAnimated: 0,
       // loop: 0,
     };
   },
   watch: {
-    number: function (newValue, oldValue) {
+    // timeInput: function(){
+
+    // },
+    timeInput: function (newValue, oldValue) {
       // gsap.to(this.$data, { duration: 0.5, tweenedNumber: newValue });
       let time = (500 * 1) / Math.abs(newValue - oldValue);
       let sum = Math.abs(newValue - oldValue) / 150;
       // как только число меньше чем
-      console.log(sum, "sum");
       let state = this;
       function changeNumber(newValue) {
         if (newValue < oldValue) {
-          state.tweenedNumber = state.tweenedNumber - sum - 1;
-          if (state.tweenedNumber <= newValue) {
-            state.tweenedNumber = newValue;
+          //  state.timeAnimated = state.timeAnimated - sum - 1;
+          state.timeAnimated = state.timeAnimated - sum;
+          if (state.timeAnimated <= newValue) {
+            state.timeAnimated = newValue;
             clearInterval(timerId);
           }
         } else {
           // при маленьких значениях прибавление 1 может быть лишним из-за увелечение предпологаемой скорости
-          state.tweenedNumber = state.tweenedNumber + sum;
-          if (state.tweenedNumber >= newValue) {
-            state.tweenedNumber = newValue;
+          state.timeAnimated = state.timeAnimated + sum;
+          if (state.timeAnimated >= newValue) {
+            state.timeAnimated = newValue;
             clearInterval(timerId);
           }
         }
@@ -161,10 +170,10 @@ export default {
     //   console.log(this.timeInput);
     //   // return this.timeInput;
     // },
-    animatedNumber: function () {
-      // return this.tweenedNumber
-      return this.tweenedNumber.toFixed(0);
-    },
+    // animatedNumber: function () {
+    //   // return this.tweenedNumber
+    //   return this.tweenedNumber.toFixed(0);
+    // },
     setings() {
       this.setingsData = this.$store.state.defaultConfig;
       this.timeComuted();
@@ -275,17 +284,18 @@ export default {
   },
   filters: {
     timeFilter: function (value) {
+      let fixedValue = value.toFixed(0);
       let minutes;
       let sec;
-      if (value < 60) {
+      if (fixedValue < 60) {
         minutes = 0;
-        sec = value;
+        sec = fixedValue;
         if (sec < 10) {
           sec = `0${sec}`;
         }
       } else {
-        minutes = Math.trunc(value / 60);
-        sec = value - minutes * 60;
+        minutes = Math.trunc(fixedValue / 60);
+        sec = fixedValue - minutes * 60;
         if (sec < 10) {
           sec = `0${sec}`;
         }
