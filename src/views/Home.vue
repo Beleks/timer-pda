@@ -81,6 +81,10 @@
             <div class="pause" v-else @click="proceed">Продолжить</div>
           </div>
         </div>
+        <div>
+          <input v-model.number="number" type="number" step="20" />
+          <p>{{ animatedNumber }}</p>
+        </div>
       </div>
     </div>
     <div class="footer_block">0.3.0v beta</div>
@@ -114,10 +118,47 @@ export default {
       },
       checkLoop: 1,
       stopButton: false,
+      // testTime
+      number: 0,
+      tweenedNumber: 0,
       // loop: 0,
     };
   },
+  watch: {
+    number: function (newValue, oldValue) {
+      // gsap.to(this.$data, { duration: 0.5, tweenedNumber: newValue });
+      let time = (500 * 1) / Math.abs(newValue - oldValue);
+      let sum = Math.abs(newValue - oldValue) / 150;
+      // как только число меньше чем 
+      console.log(sum, "sum");
+      let state = this;
+      function changeNumber(newValue) {
+        if (newValue < oldValue) {
+          state.tweenedNumber = state.tweenedNumber - sum - 1;
+          if (state.tweenedNumber <= newValue) {
+            state.tweenedNumber = newValue;
+            clearInterval(timerId);
+          }
+        } else {
+          // при маленьких значениях прибавление 1 может быть лишним
+          state.tweenedNumber = state.tweenedNumber + sum;
+          if (state.tweenedNumber >= newValue) {
+            state.tweenedNumber = newValue;
+            clearInterval(timerId);
+          }
+        }
+      }
+      // Надо получить два парметра сколько частей надо сложить с такой задержкой что бы в сумме получилось 500 мс (0.5с)
+      let timerId = setInterval(() => {
+        changeNumber(newValue);
+      }, 1);
+    },
+  },
   computed: {
+    animatedNumber: function () {
+      // return this.tweenedNumber
+      return this.tweenedNumber.toFixed(0);
+    },
     setings() {
       return this.$store.state.defaultConfig;
     },
