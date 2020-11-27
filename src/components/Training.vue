@@ -21,7 +21,7 @@
           </div>
           <ControlButton
             :minValue="1"
-            :maxValue="30"
+            :maxValue="100"
             :objKey="'loop'"
           ></ControlButton>
         </div>
@@ -73,11 +73,31 @@
           <!-- <div :class="['bg-inhale-2', {}]"></div> -->
         </div>
       </div>
+
+      <div class="progress">
+        <div>Прогресс тренировки</div>
+        <div class="info">
+          <div>
+            <div>
+              <Loop></Loop>
+            </div>
+            <div>{{ progressLoopComputed }}</div>
+          </div>
+          <div>
+            <div><Time></Time></div>
+            <div>{{ progressTimeComputed }}</div>
+          </div>
+        </div>
+      </div>
       <div class="play_panel" v-show="training">
-        <div class="loop">Осталось циклов: {{ this.checkLoop }}</div>
+        <!-- <div class="loop">Осталось циклов: {{ this.checkLoop }}</div> -->
         <div class="play_block" v-show="!this.timer">
-          <div class="pause" v-if="!stopButton" @click="stop">Стоп</div>
-          <div class="pause" v-else @click="proceed">Продолжить</div>
+          <div class="pause" v-if="!stopButton" @click="stop">
+            <Pause></Pause>
+          </div>
+          <div class="pause" v-else @click="proceed">
+            <Play></Play>
+          </div>
         </div>
       </div>
       <!-- <div>
@@ -90,6 +110,13 @@
 
 <script>
 import ControlButton from "../components/ControlButton.vue";
+// ======
+// svg
+//
+import Pause from "../components/svg/Pause";
+import Play from "../components/svg/Play";
+import Loop from "../components/svg/Loop";
+import Time from "../components/svg/Time";
 
 export default {
   data: () => {
@@ -99,7 +126,7 @@ export default {
       timer: false,
       startFlag: false,
       startFlagTwo: false,
-      current: 5,
+      current: 2,
       setingsData: {
         pda: 15,
         inhale: 2,
@@ -107,6 +134,8 @@ export default {
       },
       checkLoop: 1,
       stopButton: false,
+      progressTime: 0,
+      secProgress: 0,
       // ======================
       // testTime
       //
@@ -154,15 +183,17 @@ export default {
     },
   },
   computed: {
-    // timeComuted() {
-    //   this.timeInput = this.setings.pda * this.setings.loop;
-    //   console.log(this.timeInput);
-    //   // return this.timeInput;
-    // },
-    // animatedNumber: function () {
-    //   // return this.tweenedNumber
-    //   return this.tweenedNumber.toFixed(0);
-    // },
+    progressLoopComputed() {
+      let settingLoop = this.$store.state.defaultConfig.loop;
+      return settingLoop - this.checkLoop;
+    },
+    progressTimeComputed() {
+      if (this.progressTime === 0) {
+        return `\<${this.progressTime + 1} мин`;
+      } else {
+        return `${this.progressTime} мин`;
+      }
+    },
     setings() {
       this.setingsData = this.$store.state.defaultConfig;
       this.timeComuted();
@@ -196,6 +227,7 @@ export default {
       console.log("Продолжить");
       this.startFlag = true;
       this.stopButton = false;
+      this.progressInterval();
     },
     start() {
       this.training = true;
@@ -208,7 +240,6 @@ export default {
           clearInterval(timer);
 
           // scope.timer = false // ! метка
-          let timerClok = scope.setings.time * 1000;
           // index--;
           // scope.checkTime = index;
           console.log("начал отсчет");
@@ -219,21 +250,36 @@ export default {
           scope.startClick = true;
           scope.startFlag = true;
           scope.timer = false;
+          scope.progressInterval();
           // ==================================!!!!!!!!!!!!!!!!!!!!!!!!
-
-          // setTimeout(() => {
-          //   console.log("конец");
-          //   scope.startClick = false;
-          //   scope.timer = false;
-          //   scope.startFlag = false;
-          //   scope.startFlagTwo = false;
-          //   scope.current = 5;
-          //   console.log(scope.checkTime, "время окончания");
-          // }, timerClok);
         }
         scope.current--;
       }, 1000);
       // setTimeout();
+    },
+    progressInterval() {
+      let scope = this;
+      let timerClok = (scope.timeAnimated.toFixed(0) / 60).toFixed(0);
+
+      let progress = setInterval(() => {
+        if (scope.stopButton) {
+          clearInterval(progress);
+          // console.log(scope.secProgress, "secProgress STOP !");
+        }
+        console.log(scope.secProgress);
+        scope.secProgress++;
+        if (scope.secProgress % 60 === 0) {
+          scope.progressTime++;
+          console.log(scope.progressTime, "% 60 === 0");
+        }
+        if (scope.progressTime >= timerClok) {
+          // Сброс настроек
+          // Ре
+          console.log('progressInterval END')
+          scope.progressTime === 0;
+          clearInterval(progress);
+        }
+      }, 1000);
     },
     // pda(value) {
     //   console.log(value, "set from child");
@@ -271,7 +317,9 @@ export default {
         this.training = false;
         this.startClick = false;
         this.timer = false;
-        this.current = 5;
+        this.current = 2;
+        this.secProgress = 0;
+        this.progressTime = 0;
       }
     },
   },
@@ -296,7 +344,7 @@ export default {
       return `${minutes}:${sec}`;
     },
   },
-  components: { ControlButton },
+  components: { ControlButton, Pause, Play, Loop, Time, Time },
 };
 </script>
 
@@ -309,7 +357,34 @@ export default {
   // height: 30px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  .play_block {
+    display: flex;
+    justify-content: center;
+  }
+}
+.progress {
+  margin-top: 0.5em;
+}
+.info {
+  display: flex;
+  // justify-content: space-evenly;
+  // margin-top: 0.5em;
+  padding-top: 0.5em;
+  > div {
+    width: 50%;
+    display: flex;
+    // padding-left: 2em;
+    border-radius: 5px;
+    margin: 0.3em 0;
+    padding: 0.2em 0;
+    background-color: rgba(128, 128, 128, 0.1);
+    justify-content: center;
+    align-items: center;
+  }
+  > div:first-child {
+    margin-right: 0.6em;
+  }
 }
 
 .time {
@@ -326,7 +401,7 @@ export default {
   opacity: 0;
 }
 .pause {
-  padding: 0.2em 0.8em;
+  padding: 0.2em 2em;
   border: 1px solid gray;
   border-radius: 5px;
   cursor: pointer;
