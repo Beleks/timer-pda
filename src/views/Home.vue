@@ -9,13 +9,13 @@
         :class="{ active_tub: tabComponent === 'Training' }"
         @click="tabComponent = 'Training'"
       >
-        тренировка
+        <TrainingSvg></TrainingSvg>
       </div>
       <div
         :class="{ active_tub: tabComponent === 'Profile' }"
         @click="tabComponent = 'Profile'"
       >
-        профиль
+        <User></User>
       </div>
     </div>
     <!-- <div class="start"><div class="button" >Начать</div></div> -->
@@ -25,6 +25,8 @@
 <script>
 import Training from "@/components/Training.vue";
 import Profile from "@/components/Profile.vue";
+import TrainingSvg from "@/components/svg/Training.vue";
+import User from "@/components/svg/User.vue";
 
 //=============1
 // Плавное премещение scale наверх?
@@ -42,6 +44,8 @@ export default {
   components: {
     Training,
     Profile,
+    TrainingSvg,
+    User,
   },
 };
 </script>
@@ -59,7 +63,6 @@ export default {
   }
 }
 .home {
-  background-color: rgba(223, 230, 233, 0.3);
   top: 0;
   bottom: 0;
   left: 0;
@@ -78,9 +81,9 @@ export default {
     // opacity: 0.5;
     > div {
       border-radius: 5px;
-      padding: 0.5em;
+      padding: 0.3em;
       width: 50%;
-      transition:  background-color 0.2s ease-in-out;
+      transition: background-color 0.2s ease-in-out;
     }
     > div:first-child {
       margin-right: 0.4em;
@@ -90,7 +93,7 @@ export default {
 }
 .active_tub {
   // background-color: rgba(128, 128, 128, 0.2);
-  background-color:  rgba(29, 209, 161, 0.3);
+  background-color: rgba(29, 209, 161, 0.3);
 }
 // New
 </style>

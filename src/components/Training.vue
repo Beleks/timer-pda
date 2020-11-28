@@ -74,7 +74,7 @@
         </div>
       </div>
 
-      <div class="progress">
+      <div class="progress" v-show="training">
         <div>Прогресс тренировки</div>
         <div class="info">
           <div>

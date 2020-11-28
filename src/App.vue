@@ -48,6 +48,7 @@ body {
   padding: 0;
   display: flex;
   justify-content: center;
+  background-color: rgba(223, 230, 233, 0.3);
 }
 // #nav {
 //   padding: 30px;

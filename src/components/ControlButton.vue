@@ -148,12 +148,12 @@ export default {
   }
   .minus {
     border-radius: 5px 0 0 5px;
-    background-color: rgba(255, 107, 107, 0.8);
+    background-color: rgba(255, 107, 107, 0.7);
   }
   .plus {
     border-left: none;
     border-radius: 0 5px 5px 0;
-    background-color: rgba(29, 209, 161, 0.8);
+    background-color: rgba(29, 209, 161, 0.7);
   }
   .minus:active {
     background-color: rgba(239, 83, 80, 1);

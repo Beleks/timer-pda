@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="information">
-      <div>
+      <!-- <div>
         <div></div>
         <div>Всего тренировок</div>
       </div>
@@ -12,7 +12,7 @@
       <div>
         <div></div>
         <div>Самая длинная тренировка</div>
-      </div>
+      </div> -->
     </div>
     <div class="log">
       <div class="info">
@@ -66,6 +66,27 @@ export default {
     return {
       table: [
         {
+          data: "30.11.2020",
+          pda: 36,
+          inhale: 4,
+          exhalation: 32,
+          time: "2:40",
+        },
+        {
+          data: "29.11.2020",
+          pda: 30,
+          inhale: 4,
+          exhalation: 26,
+          time: "13:00",
+        },
+        {
+          data: "28.11.2020",
+          pda: 30,
+          inhale: 4,
+          exhalation: 26,
+          time: "2:00",
+        },
+        {
           data: "27.11.2020",
           pda: 30,
           inhale: 4,
@@ -80,9 +101,11 @@ export default {
 
 <style lang="scss" scoped>
 .log {
+  margin-top: 1em;
   .info {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    margin: 0.8em;
   }
 }
 // table
@@ -109,7 +132,7 @@ export default {
     // align-items: center;
     // width: 100%;
     flex-direction: column;
-    margin: 0.8em;
+    margin: 0.4em 0.8em;
     .data {
       display: flex;
       font-size: 0.9rem;
@@ -120,10 +143,9 @@ export default {
     > div:not(:first-child) {
       // flex-basis: 18%;
     }
-    .cards{
+    .cards {
       display: flex;
       justify-content: space-between;
-
     }
   }
 }
