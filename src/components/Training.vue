@@ -95,7 +95,7 @@
           <div class="pause" v-if="!stopButton" @click="stop">
             <Pause></Pause>
           </div>
-          <div class="pause" v-else @click="proceed">
+          <div class="play" v-else @click="proceed">
             <Play></Play>
           </div>
         </div>
@@ -137,6 +137,7 @@ export default {
       },
       forEndTraning: {
         loop: 0,
+        time: "",
       },
       checkLoop: 1,
       stopButton: false,
@@ -373,6 +374,18 @@ export default {
   .play_block {
     display: flex;
     justify-content: center;
+    > div {
+      padding: 0.2em 2em;
+      border: 1px solid gray;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .pause {
+      background-color: rgba(255, 107, 107, 0.4);
+    }
+    .play {
+      background-color: rgba(29, 209, 161, 0.4);
+    }
   }
   .end {
     margin: 1em;
@@ -417,10 +430,6 @@ export default {
   opacity: 0;
 }
 .pause {
-  padding: 0.2em 2em;
-  border: 1px solid gray;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 // =================================================
@@ -440,7 +449,7 @@ export default {
   transition: background-color 0.3s ease-in-out;
 }
 .start_block:hover {
-  background-color: rgba(38, 166, 153, 0.5);
+  background-color: rgba(29, 209, 161, 0.7);
 }
 .start-enter-active {
   // transition: all 0.3s ease;
@@ -499,7 +508,7 @@ export default {
   // position: absolute;
   border: none;
   border-radius: 5px 0 0 5px;
-  background-color: rgba(38, 166, 153, 0.8);
+  background-color: rgba(29, 209, 161, 0.7);
   height: 39px;
   // width: 0%;
   transition-timing-function: linear;
@@ -509,7 +518,7 @@ export default {
   // position: absolute;
   border: none;
   border-radius: 0 5px 5px 0;
-  background-color: rgba(239, 83, 80, 0.5);
+  background-color: rgba(255, 107, 107, 0.7);
   height: 39px;
   // width: 0%;
   transition: width 6s linear;

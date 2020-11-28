@@ -11,13 +11,15 @@
       <div class="sec"><slot></slot></div>
     </div>
     <div class="change">
-      <div class="minus" @click="minus()">-</div>
-      <div class="plus" @click="plus()">+</div>
+      <div class="minus" @click="minus()"><Minus></Minus></div>
+      <div class="plus" @click="plus()"><Plus></Plus></div>
     </div>
   </div>
 </template>
 
 <script>
+import Plus from "../components/svg/Plus";
+import Minus from "../components/svg/Minus";
 // import { config } from "vue/types/umd";
 export default {
   props: {
@@ -99,6 +101,9 @@ export default {
       }
     },
   },
+  components:{
+    Plus, Minus
+  }
 };
 </script>
 
@@ -140,10 +145,15 @@ export default {
   margin-left: 1em;
   display: flex;
   > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 27px;
+    width: 58px;
     user-select: none;
     border: 1px solid gray;
     cursor: pointer;
-    padding: 0.3em 1.4em;
+    // padding: 0.3em 1.4em;
     transition: background-color 0.2s ease-in-out;
   }
   .minus {
