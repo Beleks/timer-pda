@@ -379,6 +379,7 @@ export default {
       border: 1px solid gray;
       border-radius: 5px;
       cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
     }
     .pause {
       background-color: rgba(255, 107, 107, 0.4);
@@ -440,15 +441,17 @@ export default {
   cursor: pointer;
   display: flex;
   align-items: center;
-  border: 1px solid gray;
+  border: 1px solid rgba(29, 209, 161, 0.8);
   border-radius: 5px;
   //
   height: 39px;
   justify-content: center;
   align-items: center;
-  transition: background-color 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  background-color: rgba(29, 209, 161, 0.2);
 }
 .start_block:hover {
+  color: white;
   background-color: rgba(29, 209, 161, 0.7);
 }
 .start-enter-active {
@@ -508,7 +511,8 @@ export default {
   // position: absolute;
   border: none;
   border-radius: 5px 0 0 5px;
-  background-color: rgba(29, 209, 161, 0.7);
+  // background-color: rgba(29, 209, 161, 0.7);
+  background-color: rgba(10, 189, 227, 1);
   height: 39px;
   // width: 0%;
   transition-timing-function: linear;
@@ -518,7 +522,8 @@ export default {
   // position: absolute;
   border: none;
   border-radius: 0 5px 5px 0;
-  background-color: rgba(255, 107, 107, 0.7);
+  // background-color: rgba(255, 107, 107, 0.7);
+  background-color: rgba(238, 82, 83, 1);
   height: 39px;
   // width: 0%;
   transition: width 6s linear;

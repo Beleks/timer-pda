@@ -80,6 +80,7 @@ export default {
     display: flex;
     // opacity: 0.5;
     > div {
+      cursor: pointer;
       border-radius: 5px;
       padding: 0.3em;
       width: 50%;

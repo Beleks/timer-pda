@@ -121,7 +121,8 @@ export default {
   border: 1px solid gray;
   border-radius: 5px;
   width: 70px;
-  background-color: rgba(128, 128, 128, 0.1);
+  // background-color: rgba(128, 128, 128, 0.1);
+  background-color: white;
   .input-area {
     display: flex;
     align-items: center;
