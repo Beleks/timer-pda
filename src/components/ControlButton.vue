@@ -152,7 +152,7 @@ export default {
   .plus {
     border-left: none;
     border-radius: 0 5px 5px 0;
-    background-color: rgba(38, 166, 153, 0.5);
+    background-color: rgba(29, 209, 161, 1);
   }
   .minus:active {
     background-color: rgba(239, 83, 80, 1);

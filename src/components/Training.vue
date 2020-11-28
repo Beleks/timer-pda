@@ -99,6 +99,9 @@
             <Play></Play>
           </div>
         </div>
+        <div class="end" v-show="this.stopButton">
+          Хотите закончить тренировку ?
+        </div>
       </div>
       <!-- <div>
           <input v-model.number="number" type="number" step="20" />
@@ -131,6 +134,9 @@ export default {
         pda: 15,
         inhale: 2,
         loop: 6,
+      },
+      forEndTraning: {
+        loop: 0,
       },
       checkLoop: 1,
       stopButton: false,
@@ -275,7 +281,7 @@ export default {
         if (scope.progressTime >= timerClok) {
           // Сброс настроек
           // Ре
-          console.log('progressInterval END')
+          console.log("progressInterval END");
           scope.progressTime === 0;
           clearInterval(progress);
         }
@@ -308,6 +314,11 @@ export default {
       this.startFlag = false;
       // this.startFlag = true;
       // this.afterEnter()
+      //
+      // forEndTraning
+      //
+      this.forEndTraning.loop++;
+      // forEndTraning
       this.checkLoop--;
       if (this.checkLoop !== 0) {
         setTimeout(() => {
@@ -356,11 +367,16 @@ export default {
   margin: 0.7em 0;
   // height: 30px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   .play_block {
     display: flex;
     justify-content: center;
+  }
+  .end {
+    margin: 1em;
+    opacity: 0.5;
   }
 }
 .progress {
