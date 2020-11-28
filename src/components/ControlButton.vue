@@ -144,15 +144,16 @@ export default {
     border: 1px solid gray;
     cursor: pointer;
     padding: 0.3em 1.4em;
+    transition: background-color 0.2s ease-in-out;
   }
   .minus {
     border-radius: 5px 0 0 5px;
-    background-color: rgba(239, 83, 80, 0.5);
+    background-color: rgba(255, 107, 107, 0.8);
   }
   .plus {
     border-left: none;
     border-radius: 0 5px 5px 0;
-    background-color: rgba(29, 209, 161, 1);
+    background-color: rgba(29, 209, 161, 0.8);
   }
   .minus:active {
     background-color: rgba(239, 83, 80, 1);

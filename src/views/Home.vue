@@ -89,7 +89,8 @@ export default {
   }
 }
 .active_tub {
-  background-color: rgba(128, 128, 128, 0.2);
+  // background-color: rgba(128, 128, 128, 0.2);
+  background-color:  rgba(29, 209, 161, 0.3);
 }
 // New
 </style>
