@@ -9,15 +9,21 @@ export default new Vuex.Store({
       pda: localStorage.getItem("pda"),
       inhale: localStorage.getItem("inhale"),
       loop: localStorage.getItem("loop"),
-    }
+    },
+    trainingLog: JSON.parse(localStorage.getItem("trainingLog"))
   },
   mutations: {
     setConfig(state, obj) {
       localStorage.setItem(obj.key, obj.value)
       state.defaultConfig[obj.key] = obj.value
+    },
+    setTraining(state, obj){
+      localStorage.setItem("trainingLog", JSON.stringify(obj))
+      state.trainingLog = obj
     }
   },
   actions: {
+
   },
   modules: {
   }

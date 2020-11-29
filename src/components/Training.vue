@@ -4,7 +4,7 @@
       <div>
         <div class="title">
           <div class="head">ПДА</div>
-          <ControlButton :minValue="7" :maxValue="999" :objKey="'pda'"
+          <ControlButton :minValue="10" :maxValue="999" :objKey="'pda'"
             >сек</ControlButton
           >
         </div>
@@ -99,7 +99,7 @@
             <Play></Play>
           </div>
         </div>
-        <div class="end" v-show="this.stopButton">
+        <div class="end" v-show="this.stopButton" @click="endTraining()">
           Хотите закончить тренировку ?
         </div>
       </div>
@@ -120,6 +120,25 @@ import Pause from "../components/svg/Pause";
 import Play from "../components/svg/Play";
 import Loop from "../components/svg/Loop";
 import Time from "../components/svg/Time";
+//
+//
+import audioInh from "../assets/wav/inh.mp3";
+import audioExh from "../assets/wav/exh.mp3";
+import { Howl, Howler } from "howler";
+
+//
+let soundExh = new Howl({
+  src: [audioExh],
+  autoplay: false,
+  loop: true,
+  volume: 1,
+});
+let soundInh = new Howl({
+  src: [audioInh],
+  autoplay: false,
+  loop: false,
+  volume: 1,
+});
 
 export default {
   data: () => {
@@ -135,9 +154,10 @@ export default {
         inhale: 2,
         loop: 6,
       },
-      forEndTraning: {
+      forEndTraining: {
         loop: 0,
-        time: "",
+        // time: "",
+        // date: "",
       },
       checkLoop: 1,
       stopButton: false,
@@ -214,9 +234,43 @@ export default {
     },
   },
   methods: {
-    update() {
-      // location.reload(true)
-      // console.log('Обновлено')
+    endTraining() {
+      let trainingSettings;
+      //
+      let date = new Date();
+      let dateObj = new Date();
+      let month = dateObj.getUTCMonth() + 1; //months from 1-12
+      let day = dateObj.getUTCDate();
+      let year = dateObj.getUTCFullYear();
+
+      //
+      let pda = this.setingsData.pda;
+      let inhale = this.setingsData.inhale;
+      let exhalation = this.setingsData.pda - this.setingsData.inhale;
+      let time = this.forEndTraining.loop * this.setingsData.pda;
+      trainingSettings = {
+        date: day + "." + month + "." + year,
+        pda,
+        inhale,
+        exhalation,
+        time,
+        life: 0,
+      };
+      let mas = this.$store.state.trainingLog;
+      if (mas === null) {
+        let newMas = [];
+        newMas.push(trainingSettings);
+        this.$store.commit("setTraining", newMas);
+      } else {
+        // JSON.parse(mas)
+
+        let newMas = [];
+        newMas.push(trainingSettings);
+        let oldMas = mas.slice();
+        let resultMas = newMas.concat(oldMas);
+        console.log(resultMas, "массив для сохранения");
+        this.$store.commit("setTraining", resultMas);
+      }
     },
     timeComuted() {
       this.timeInput = this.setingsData.pda * this.setingsData.loop;
@@ -228,9 +282,12 @@ export default {
       this.stopButton = true;
       this.startFlag = false;
       this.startFlagTwo = false;
+      soundExh.stop()
+      soundInh.stop()
       // scope.current = 5;
     },
     proceed() {
+      soundInh.play()
       console.log("Продолжить");
       this.startFlag = true;
       this.stopButton = false;
@@ -258,6 +315,8 @@ export default {
           scope.startFlag = true;
           scope.timer = false;
           scope.progressInterval();
+
+          soundInh.play()
           // ==================================!!!!!!!!!!!!!!!!!!!!!!!!
         }
         scope.current--;
@@ -309,6 +368,7 @@ export default {
       // } else {
       // }
       this.startFlagTwo = true;
+      soundExh.play();
     },
     afterEnterTwo() {
       this.startFlagTwo = false;
@@ -318,14 +378,17 @@ export default {
       //
       // forEndTraning
       //
-      this.forEndTraning.loop++;
+      this.forEndTraining.loop++;
       // forEndTraning
       this.checkLoop--;
+      soundExh.stop();
       if (this.checkLoop !== 0) {
+        soundInh.play()
         setTimeout(() => {
           this.startFlag = true;
         }, 0);
       } else {
+        this.endTraining();
         this.training = false;
         this.startClick = false;
         this.timer = false;
