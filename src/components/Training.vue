@@ -20,7 +20,7 @@
             (в циклах)
           </div>
           <ControlButton
-            :minValue="1"
+            :minValue="2"
             :maxValue="100"
             :objKey="'loop'"
           ></ControlButton>
@@ -75,67 +75,58 @@
       </div>
 
       <div class="progress" v-show="training">
-        <Progress :pauseStatus="stopButton" @stop-training="endTraining()" :secProgress="secProgress"></Progress>
+        <Progress
+          :pauseStatus="stopButton"
+          :secProgress="secProgress"
+          :maxProgress="setingsData.loop.toString()"
+          :minProgress="progressLoopComputed.toString()"
+        ></Progress>
         <div class="info">
-          <div>
-            <div>
-              <Loop></Loop>
-            </div>
-            <div>{{ progressLoopComputed }}</div>
-          </div>
           <div>
             <div><Time></Time></div>
             <div>{{ progressTimeComputed }}</div>
           </div>
-        </div>
-      </div>
-      <div class="play_panel" v-show="training">
-        <!-- <div class="loop">Осталось циклов: {{ this.checkLoop }}</div> -->
-        <div class="play_block" v-show="!this.timer">
-          <div class="pause" v-if="!stopButton" @click="stop">
-            <Pause></Pause>
-          </div>
-          <div class="play" v-else @click="proceed">
-            <Play></Play>
-          </div>
-        </div>
-        <!-- <div class="end" v-show="this.stopButton">
-          <div
-            class="pre_keep"
-            @click="preEndStatus = true"
-            v-if="!preEndStatus"
-          >
-            Закончить тренировку
-          </div>
-          <div class="keep" v-else>
-            <div class="title">Сохранить?</div>
-            <div class="buttons">
-              <div @click="returnOptions()">нет</div>
-              <div @click="endTraining()">да</div>
+          <div class="play_panel">
+            <div class="play_block" v-show="!this.timer">
+              <div class="pause" v-if="!stopButton" @click="stop">
+                <Pause></Pause>
+              </div>
+              <div class="play" v-else @click="proceed">
+                <Play></Play>
+              </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
+
       <!-- <div>
           <input v-model.number="number" type="number" step="20" />
           <p>{{ animatedNumber }}</p>
         </div> -->
     </div>
+    <div v-if="training" class="end_training">
+      <div class="button" @click="endTraining()">
+        <Finish></Finish>
+        <div>Закончить тренировку</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+// components
 import ControlButton from "../components/ControlButton.vue";
 import Progress from "../components/Progress";
 // ======
 // svg
 //
+import Finish from "../components/svg/Finish";
 import Pause from "../components/svg/Pause";
 import Play from "../components/svg/Play";
 import Loop from "../components/svg/Loop";
 import Time from "../components/svg/Time";
 //
-//
+// audio
 import audioInh from "../assets/wav/inh.mp3";
 import audioExh from "../assets/wav/exh.mp3";
 import { Howl, Howler } from "howler";
@@ -315,7 +306,7 @@ export default {
       // scope.current = 5;
     },
     proceed() {
-      this.secProgress = this.lastSecProgress
+      this.secProgress = this.lastSecProgress;
       soundInh.play();
       console.log("Продолжить");
       this.preEndStatus = false;
@@ -410,7 +401,7 @@ export default {
       //
       this.forEndTraining.loop++;
       // forEndTraning
-      this.lastSecProgress = this.secProgress
+      this.lastSecProgress = this.secProgress;
       this.checkLoop--;
       soundExh.stop();
       if (this.checkLoop !== 0) {
@@ -444,16 +435,46 @@ export default {
       return `${minutes}:${sec}`;
     },
   },
-  components: { ControlButton, Pause, Play, Loop, Time, Time, Progress },
+  components: {
+    ControlButton,
+    Pause,
+    Play,
+    Loop,
+    Time,
+    Time,
+    Progress,
+    Finish,
+  },
 };
 </script>
 
 <style  lang="scss" scoped>
 .head_block {
   padding: 0.5em;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.end_training {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+
+  .button {
+    border-radius: 5px;
+    background-color: rgba(255, 107, 107, 0.4);
+    padding: 0.4em 0.8em;
+    max-width: 200px;
+    display: flex;
+    justify-content: center;
+    > div:last-child {
+      margin-left: 0.5em;
+    }
+  }
 }
 .play_panel {
-  margin: 0.7em 0;
+  // margin: 0.7em 0;
   // height: 30px;
   display: flex;
   flex-direction: column;
@@ -479,6 +500,7 @@ export default {
       background-color: rgba(29, 209, 161, 0.4);
     }
   }
+
   .end {
     margin: 1em;
     // opacity: 0.5;
@@ -518,17 +540,17 @@ export default {
 }
 .info {
   display: flex;
-  // justify-content: space-evenly;
-  // margin-top: 0.5em;
+  justify-content: space-between;
+  margin-top: 0.5em;
   padding-top: 0.5em;
   > div {
-    width: 50%;
+    // width: 50%;
     display: flex;
     // padding-left: 2em;
-    border-radius: 5px;
-    margin: 0.3em 0;
-    padding: 0.2em 0;
-    background-color: rgba(128, 128, 128, 0.1);
+    // border-radius: 5px;
+    // margin: 0.3em 0;
+    // padding: 0.2em 0;
+    // background-color: rgba(128, 128, 128, 0.1);
     justify-content: center;
     align-items: center;
   }

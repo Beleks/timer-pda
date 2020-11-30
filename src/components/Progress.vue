@@ -1,24 +1,35 @@
 <template>
-  <div class="progress">
-    <div class="line">
+  <div class="main">
+    <div class="top">
+      <div>{{ minProgress }}</div>
+      <div class="line">
+        <div
+          class="progress"
+          :style="{ width: `${lineWidth}%` }"
+          :class="{ yellow: pauseStatus, green: !pauseStatus }"
+        ></div>
+      </div>
+      <div>{{ maxProgress }}</div>
+    </div>
+    <div></div>
+    <!-- <div class="line">
       <div
         v-for="(column, index) in progressLine"
         :key="index"
         class="column"
-        :class="{ yellow: column.status, animation: index === 9 }"
+        :class="{ yellow: pauseStatus, green: !pauseStatus }"
       ></div>
     </div>
-    <div class="stop_buttons">
-      <!-- <div class="pause" v-if="!pauseStatus">
+    <div class="stop_buttons"> -->
+    <!-- <div class="pause" v-if="!pauseStatus">
         <Pause></Pause>
       </div>
       <div class="play" v-else>
         <Play></Play>
       </div> -->
-      <div class="stop_training" v-if="pauseStatus" @click="$emit('stop-training')">
+    <!-- <div class="stop_training" v-if="pauseStatus" @click="$emit('stop-training')">
         <Finish></Finish>
-      </div>
-    </div>
+      </div> -->
   </div>
 </template>
 
@@ -26,53 +37,72 @@
 import Pause from "../components/svg/Pause";
 import Play from "../components/svg/Play";
 import Finish from "../components/svg/Finish";
+import Loop from "../components/svg/Loop";
+import Time from "../components/svg/Time";
 
 export default {
   props: {
     pauseStatus: Boolean,
+    maxProgress: String,
+    minProgress: String,
   },
   data: () => {
     return {
-      pause: false,
-      progressLine: [
-        { status: true },
-        { status: true },
-        { status: true },
-        { status: true },
-        { status: true },
-        { status: true },
-        { status: true },
-        { status: true },
-        { status: true },
-        { status: false },
-      ],
+      // pause: false,
     };
+  },
+  computed: {
+    lineWidth() {
+      let step = 1 / this.maxProgress;
+      step = step.toFixed(4) * 100;
+      return step * this.minProgress;
+    },
   },
   components: {
     Pause,
     Play,
     Finish,
+    Loop,
+    Time,
   },
 };
 </script>
 
 <style scoped lang="scss">
-.progress {
+.main {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+}
+// .progress {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+// }
+.top {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  // >div{
+  //   display: flex;
+  //   align-items: center;
+  // }
+  background-color: white;
+  border-radius: 5px;
+  padding: 0.2em;
+  max-width: 310px;
 }
 .line {
-  background-color: white;
-  display: flex;
-  padding: 0.1em 0.3em;
   border-radius: 5px;
-  .column {
-    width: 10px;
-    height: 23px;
-    margin: 0.1em;
-    border-radius: 3px;
-    // transition: background-color 2s ease-in-out;
+  height: 18px;
+  // display: flex;
+  min-width: 240px;
+  margin: 0 0.5em;
+  > div {
+  }
+  .progress {
+    border-radius: 5px;
+    height: 100%;
+    transition: width 1s ease-in-out, background-color 0.5s ease-in-out;
   }
 }
 .stop_buttons {
