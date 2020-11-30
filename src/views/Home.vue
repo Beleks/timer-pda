@@ -12,6 +12,7 @@
         <TrainingSvg></TrainingSvg>
       </div>
       <div
+        v-if="true"
         :class="{ active_tub: tabComponent === 'Profile' }"
         @click="tabComponent = 'Profile'"
       >
@@ -38,7 +39,7 @@ export default {
   name: "Home",
   data: () => {
     return {
-      tabComponent: "Profile",
+      tabComponent: "Training",
     };
   },
   components: {
@@ -70,9 +71,10 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 320px;
   //
   .footer_block {
-    margin: 0.5em;
+    margin: 0.2em;
     // border: 1px solid gray;
     background-color: white;
     border-radius: 5px;
@@ -81,13 +83,13 @@ export default {
     // opacity: 0.5;
     > div {
       cursor: pointer;
+      margin: 0.2em;
       border-radius: 5px;
       padding: 0.3em;
       width: 50%;
       transition: background-color 0.2s ease-in-out;
     }
     > div:first-child {
-      margin-right: 0.4em;
       // border-right: 1px solid gray;
     }
   }

@@ -20,7 +20,6 @@
 <script>
 import Plus from "../components/svg/Plus";
 import Minus from "../components/svg/Minus";
-// import { config } from "vue/types/umd";
 export default {
   props: {
     objKey: String,
@@ -101,9 +100,10 @@ export default {
       }
     },
   },
-  components:{
-    Plus, Minus
-  }
+  components: {
+    Plus,
+    Minus,
+  },
 };
 </script>
 
@@ -111,6 +111,7 @@ export default {
 .main {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .input-block {
   position: relative;
@@ -121,6 +122,7 @@ export default {
   border: 1px solid gray;
   border-radius: 5px;
   width: 70px;
+  height: 26px;
   // background-color: rgba(128, 128, 128, 0.1);
   background-color: white;
   .input-area {
@@ -143,28 +145,33 @@ export default {
   }
 }
 .change {
-  margin-left: 1em;
+  // margin-left: 1em;
   display: flex;
+  background-color: white;
+  // padding: 0.2em;
+  border-radius: 5px;
   > div {
+    border-radius: 5px;
+    margin: 0.2em;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 27px;
     width: 58px;
     user-select: none;
-    border: 1px solid gray;
+    // border: 1px solid gray;
     cursor: pointer;
     // padding: 0.3em 1.4em;
     transition: background-color 0.2s ease-in-out;
   }
   .minus {
-    border-radius: 5px 0 0 5px;
-    background-color: rgba(255, 107, 107, 0.7);
+    // border-radius: 5px 0 0 5px;
+    background-color: rgba(255, 107, 107, 0.4);
   }
   .plus {
     border-left: none;
-    border-radius: 0 5px 5px 0;
-    background-color: rgba(29, 209, 161, 0.7);
+    // border-radius: 0 5px 5px 0;
+    background-color: rgba(29, 209, 161, 0.4);
   }
   .minus:active {
     background-color: rgba(239, 83, 80, 1);

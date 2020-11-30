@@ -75,7 +75,7 @@
       </div>
 
       <div class="progress" v-show="training">
-        <div>Прогресс тренировки</div>
+        <Progress :pauseStatus="stopButton" @stop-training="endTraining()" :secProgress="secProgress"></Progress>
         <div class="info">
           <div>
             <div>
@@ -99,9 +99,22 @@
             <Play></Play>
           </div>
         </div>
-        <div class="end" v-show="this.stopButton" @click="endTraining()">
-          Хотите закончить тренировку ?
-        </div>
+        <!-- <div class="end" v-show="this.stopButton">
+          <div
+            class="pre_keep"
+            @click="preEndStatus = true"
+            v-if="!preEndStatus"
+          >
+            Закончить тренировку
+          </div>
+          <div class="keep" v-else>
+            <div class="title">Сохранить?</div>
+            <div class="buttons">
+              <div @click="returnOptions()">нет</div>
+              <div @click="endTraining()">да</div>
+            </div>
+          </div>
+        </div> -->
       </div>
       <!-- <div>
           <input v-model.number="number" type="number" step="20" />
@@ -113,6 +126,7 @@
 
 <script>
 import ControlButton from "../components/ControlButton.vue";
+import Progress from "../components/Progress";
 // ======
 // svg
 //
@@ -132,12 +146,14 @@ let soundExh = new Howl({
   autoplay: false,
   loop: true,
   volume: 1,
+  preload: true,
 });
 let soundInh = new Howl({
   src: [audioInh],
   autoplay: false,
   loop: false,
   volume: 1,
+  preload: true,
 });
 
 export default {
@@ -159,10 +175,12 @@ export default {
         // time: "",
         // date: "",
       },
+      preEndStatus: false,
       checkLoop: 1,
       stopButton: false,
       progressTime: 0,
       secProgress: 0,
+      lastSecProgress: 0,
       // ======================
       // testTime
       //
@@ -236,6 +254,14 @@ export default {
   methods: {
     endTraining() {
       let trainingSettings;
+      this.training = false;
+      this.startClick = false;
+      this.timer = false;
+      this.current = 2;
+      this.secProgress = 0;
+      this.lastSecProgress = 0;
+      this.progressTime = 0;
+      this.preEndStatus = false;
       //
       let date = new Date();
       let dateObj = new Date();
@@ -248,6 +274,7 @@ export default {
       let inhale = this.setingsData.inhale;
       let exhalation = this.setingsData.pda - this.setingsData.inhale;
       let time = this.forEndTraining.loop * this.setingsData.pda;
+
       trainingSettings = {
         date: day + "." + month + "." + year,
         pda,
@@ -256,6 +283,7 @@ export default {
         time,
         life: 0,
       };
+
       let mas = this.$store.state.trainingLog;
       if (mas === null) {
         let newMas = [];
@@ -282,13 +310,15 @@ export default {
       this.stopButton = true;
       this.startFlag = false;
       this.startFlagTwo = false;
-      soundExh.stop()
-      soundInh.stop()
+      soundExh.stop();
+      soundInh.stop();
       // scope.current = 5;
     },
     proceed() {
-      soundInh.play()
+      this.secProgress = this.lastSecProgress
+      soundInh.play();
       console.log("Продолжить");
+      this.preEndStatus = false;
       this.startFlag = true;
       this.stopButton = false;
       this.progressInterval();
@@ -315,8 +345,8 @@ export default {
           scope.startFlag = true;
           scope.timer = false;
           scope.progressInterval();
+          soundInh.play();
 
-          soundInh.play()
           // ==================================!!!!!!!!!!!!!!!!!!!!!!!!
         }
         scope.current--;
@@ -380,21 +410,16 @@ export default {
       //
       this.forEndTraining.loop++;
       // forEndTraning
+      this.lastSecProgress = this.secProgress
       this.checkLoop--;
       soundExh.stop();
       if (this.checkLoop !== 0) {
-        soundInh.play()
+        soundInh.play();
         setTimeout(() => {
           this.startFlag = true;
         }, 0);
       } else {
         this.endTraining();
-        this.training = false;
-        this.startClick = false;
-        this.timer = false;
-        this.current = 2;
-        this.secProgress = 0;
-        this.progressTime = 0;
       }
     },
   },
@@ -419,7 +444,7 @@ export default {
       return `${minutes}:${sec}`;
     },
   },
-  components: { ControlButton, Pause, Play, Loop, Time, Time },
+  components: { ControlButton, Pause, Play, Loop, Time, Time, Progress },
 };
 </script>
 
@@ -437,9 +462,12 @@ export default {
   .play_block {
     display: flex;
     justify-content: center;
+    background-color: white;
+    border-radius: 5px;
     > div {
+      // margin: 0.2em;
       padding: 0.2em 2em;
-      border: 1px solid gray;
+      // border: 1px solid gray;
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.2s ease-in-out;
@@ -453,7 +481,36 @@ export default {
   }
   .end {
     margin: 1em;
-    opacity: 0.5;
+    // opacity: 0.5;
+    .pre_keep {
+      cursor: pointer;
+    }
+    .keep {
+      display: flex;
+      flex-direction: column;
+      .title {
+        width: 200px;
+      }
+      .buttons {
+        display: flex;
+        justify-content: space-evenly;
+        > div {
+          padding: 0.2em 0.5em;
+          border: 1px solid;
+          cursor: pointer;
+          border-radius: 5px;
+          width: 40px;
+        }
+        div:first-child {
+          border-color: rgba(255, 107, 107, 0.5);
+          background-color: rgba(255, 107, 107, 0.5);
+        }
+        div:last-child {
+          border-color: rgba(29, 209, 161, 0.5);
+          background-color: rgba(29, 209, 161, 0.5);
+        }
+      }
+    }
   }
 }
 .progress {
