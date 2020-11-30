@@ -12,24 +12,6 @@
       <div>{{ maxProgress }}</div>
     </div>
     <div></div>
-    <!-- <div class="line">
-      <div
-        v-for="(column, index) in progressLine"
-        :key="index"
-        class="column"
-        :class="{ yellow: pauseStatus, green: !pauseStatus }"
-      ></div>
-    </div>
-    <div class="stop_buttons"> -->
-    <!-- <div class="pause" v-if="!pauseStatus">
-        <Pause></Pause>
-      </div>
-      <div class="play" v-else>
-        <Play></Play>
-      </div> -->
-    <!-- <div class="stop_training" v-if="pauseStatus" @click="$emit('stop-training')">
-        <Finish></Finish>
-      </div> -->
   </div>
 </template>
 

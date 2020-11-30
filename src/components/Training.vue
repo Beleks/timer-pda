@@ -34,7 +34,6 @@
           Времени займет:
           {{ timeAnimated | timeFilter }}
         </div>
-        <!-- <div>Осталось меньше 1 минуты</div> -->
       </div>
       <!-- time -->
       <div v-if="!startClick" class="start_block" @click="start()">
@@ -44,10 +43,6 @@
       <div v-show="startClick" class="scale">
         <div class="inhale" :style="{ flexGrow: inhaleStyle }">
           <transition name="start" @after-enter="afterEnter">
-            <!-- <div v-show="startFlag"
-            :class="['bg-inhale', { start_bg_inhale: startFlag }]"
-            :style="{ transitionDuration: this.setings.inhale + 's' }"
-          ></div> -->
             <div
               v-if="startFlag"
               class="bg-inhale"
@@ -57,10 +52,6 @@
         </div>
         <div class="exhalation" :style="{ flexGrow: exhalationStyle }">
           <transition name="start" @after-enter="afterEnterTwo">
-            <!-- <div v-show="startFlag"
-            :class="['bg-inhale', { start_bg_inhale: startFlag }]"
-            :style="{ transitionDuration: this.setings.inhale + 's' }"
-          ></div> -->
             <div
               v-if="startFlagTwo"
               class="bg-inhale-2"
@@ -70,10 +61,8 @@
               }"
             ></div>
           </transition>
-          <!-- <div :class="['bg-inhale-2', {}]"></div> -->
         </div>
       </div>
-
       <div class="progress" v-show="training">
         <Progress
           :pauseStatus="stopButton"
@@ -244,6 +233,10 @@ export default {
   },
   methods: {
     endTraining() {
+      // pause
+      this.stop();
+      // 
+      // 
       let trainingSettings;
       this.training = false;
       this.startClick = false;
@@ -254,6 +247,11 @@ export default {
       this.progressTime = 0;
       this.preEndStatus = false;
       //
+      // audio stop
+      // soundInh.stop()
+      // soundExh.stop()
+      //
+
       let date = new Date();
       let dateObj = new Date();
       let month = dateObj.getUTCMonth() + 1; //months from 1-12
@@ -541,8 +539,9 @@ export default {
 .info {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-top: 0.5em;
-  padding-top: 0.5em;
+  height: 32px;
   > div {
     // width: 50%;
     display: flex;
