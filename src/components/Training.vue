@@ -100,7 +100,7 @@
         <div>Закончить тренировку</div>
       </div>
     </div>
-    <Result></Result>
+    <Result v-if="END" :trainingResult="trainingSettings"></Result>
   </div>
 </template>
 
@@ -142,6 +142,8 @@ let soundInh = new Howl({
 export default {
   data: () => {
     return {
+      END: false,
+      //
       startClick: false, // ?
       training: false, // статус тренировки
       timer: false,
@@ -171,6 +173,9 @@ export default {
       // tweenedNumber: 0,
       // ======================
       // timeAnimated
+      //
+      //
+      trainingSettings: {},
       //
       timeInput: 0,
       timeAnimated: 0,
@@ -224,7 +229,7 @@ export default {
     },
     setings() {
       this.setingsData = this.$store.state.defaultConfig;
-      this.timeComuted();
+      this.timeComputed();
       return this.$store.state.defaultConfig;
     },
     inhaleStyle() {
@@ -237,10 +242,15 @@ export default {
   methods: {
     endTraining() {
       // pause
-      this.stop();
+      // this.stop();
+
+      // костыль из-за кнопки stop, play
+      this.startFlag = false;
+      this.startFlagTwo = false;
+      soundExh.stop();
+      soundInh.stop();
       //
       //
-      let trainingSettings;
       this.training = false;
       this.startClick = false;
       this.timer = false;
@@ -249,13 +259,15 @@ export default {
       this.lastSecProgress = 0;
       this.progressTime = 0;
       this.preEndStatus = false;
+
       //
-      this.stopButton = false;
+      // this.stopButton = false;
       //
       // audio stop
       // soundInh.stop()
       // soundExh.stop()
       //
+      // let trainingSettings;
 
       let date = new Date();
       let dateObj = new Date();
@@ -268,33 +280,20 @@ export default {
       let inhale = this.setingsData.inhale;
       let exhalation = this.setingsData.pda - this.setingsData.inhale;
       let time = this.forEndTraining.loop * this.setingsData.pda;
+      let loop = this.forEndTraining.loop;
 
-      trainingSettings = {
+      this.trainingSettings = {
         date: day + "." + month + "." + year,
         pda,
         inhale,
         exhalation,
+        loop,
         time,
-        life: 0,
       };
 
-      let mas = this.$store.state.trainingLog;
-      if (mas === null) {
-        let newMas = [];
-        newMas.push(trainingSettings);
-        this.$store.commit("setTraining", newMas);
-      } else {
-        // JSON.parse(mas)
-
-        let newMas = [];
-        newMas.push(trainingSettings);
-        let oldMas = mas.slice();
-        let resultMas = newMas.concat(oldMas);
-        console.log(resultMas, "массив для сохранения");
-        this.$store.commit("setTraining", resultMas);
-      }
+      this.END = true;
     },
-    timeComuted() {
+    timeComputed() {
       this.timeInput = this.setingsData.pda * this.setingsData.loop;
     },
     toClock() {},
@@ -352,7 +351,7 @@ export default {
       let timerClok = (scope.timeAnimated.toFixed(0) / 60).toFixed(0);
 
       let progress = setInterval(() => {
-        if (scope.stopButton) {
+        if (scope.stopButton || scope.END) {
           clearInterval(progress);
           // console.log(scope.secProgress, "secProgress STOP !");
         }

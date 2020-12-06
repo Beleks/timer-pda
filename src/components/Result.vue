@@ -18,9 +18,11 @@
             <div>{{ params.title }}</div>
 
             <div class="value" v-if="params.key === 'time'">
-              {{ params[`${params.key}`] | timeFilter }}
+              {{ trainingResult[`${params.key}`] | timeFilter }}
             </div>
-            <div class="value" v-else>{{ params[`${params.key}`] }}</div>
+            <div class="value" v-else>
+              {{ trainingResult[`${params.key}`] }}
+            </div>
           </div>
         </transition-group>
       </div>
@@ -40,7 +42,7 @@
           <div>Очень тяжело</div>
           <div>Очень легко</div>
         </div>
-        <div class="save">Сохранить</div>
+        <div class="save" @click="endTraining()">Сохранить</div>
       </div>
     </div>
   </div>
@@ -51,6 +53,9 @@ import Trophy from "../components/svg/Trophy";
 import Like from "../components/svg/Like";
 import UnLike from "../components/svg/UnLike";
 export default {
+  props: {
+    trainingResult: Object,
+  },
   data: () => {
     return {
       idx: 0,
@@ -79,6 +84,23 @@ export default {
       });
       for (let i = 0; i < chose; i++) {
         this.masLike[i].like = true;
+      }
+    },
+    endTraining() {
+      let mas = this.$store.state.trainingLog;
+      if (mas === null) {
+        let newMas = [];
+        newMas.push(this.trainingResult);
+        this.$store.commit("setTraining", newMas);
+      } else {
+        // JSON.parse(mas)
+
+        let newMas = [];
+        newMas.push(this.trainingResult);
+        let oldMas = mas.slice();
+        let resultMas = newMas.concat(oldMas);
+        console.log(resultMas, "массив для сохранения");
+        this.$store.commit("setTraining", resultMas);
       }
     },
   },
