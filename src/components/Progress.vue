@@ -23,11 +23,12 @@ import Loop from "../components/svg/Loop";
 import Time from "../components/svg/Time";
 
 export default {
-  props: {
-    pauseStatus: Boolean,
-    maxProgress: String,
-    minProgress: String,
-  },
+  props: ["pauseStatus", "maxProgress", "minProgress"],
+  // props: {
+  //   pauseStatus: Boolean,
+  //   maxProgress: String,
+  //   minProgress: String,
+  // },
   data: () => {
     return {
       // pause: false,

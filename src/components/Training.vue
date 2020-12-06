@@ -63,12 +63,13 @@
           </transition>
         </div>
       </div>
+      <!-- toString() - ошибка -->
       <div class="progress" v-show="training">
         <Progress
           :pauseStatus="stopButton"
           :secProgress="secProgress"
-          :maxProgress="setingsData.loop.toString()"
-          :minProgress="progressLoopComputed.toString()"
+          :maxProgress="setingsData.loop"
+          :minProgress="progressLoopComputed"
         ></Progress>
         <div class="info">
           <div>
@@ -99,6 +100,7 @@
         <div>Закончить тренировку</div>
       </div>
     </div>
+    <Result></Result>
   </div>
 </template>
 
@@ -106,6 +108,7 @@
 // components
 import ControlButton from "../components/ControlButton.vue";
 import Progress from "../components/Progress";
+import Result from "../components/Result";
 // ======
 // svg
 //
@@ -235,8 +238,8 @@ export default {
     endTraining() {
       // pause
       this.stop();
-      // 
-      // 
+      //
+      //
       let trainingSettings;
       this.training = false;
       this.startClick = false;
@@ -246,6 +249,8 @@ export default {
       this.lastSecProgress = 0;
       this.progressTime = 0;
       this.preEndStatus = false;
+      //
+      this.stopButton = false;
       //
       // audio stop
       // soundInh.stop()
@@ -413,25 +418,25 @@ export default {
     },
   },
   filters: {
-    timeFilter: function (value) {
-      let fixedValue = value.toFixed(0);
-      let minutes;
-      let sec;
-      if (fixedValue < 60) {
-        minutes = 0;
-        sec = fixedValue;
-        if (sec < 10) {
-          sec = `0${sec}`;
-        }
-      } else {
-        minutes = Math.trunc(fixedValue / 60);
-        sec = fixedValue - minutes * 60;
-        if (sec < 10) {
-          sec = `0${sec}`;
-        }
-      }
-      return `${minutes}:${sec}`;
-    },
+    // timeFilter: function (value) {
+    //   let fixedValue = value.toFixed(0);
+    //   let minutes;
+    //   let sec;
+    //   if (fixedValue < 60) {
+    //     minutes = 0;
+    //     sec = fixedValue;
+    //     if (sec < 10) {
+    //       sec = `0${sec}`;
+    //     }
+    //   } else {
+    //     minutes = Math.trunc(fixedValue / 60);
+    //     sec = fixedValue - minutes * 60;
+    //     if (sec < 10) {
+    //       sec = `0${sec}`;
+    //     }
+    //   }
+    //   return `${minutes}:${sec}`;
+    // },
   },
   components: {
     ControlButton,
@@ -442,6 +447,8 @@ export default {
     Time,
     Progress,
     Finish,
+    Result,
+    Result,
   },
 };
 </script>

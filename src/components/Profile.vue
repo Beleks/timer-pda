@@ -38,7 +38,9 @@
           <div v-for="(record, index) in table" :key="index" class="record">
             <div class="data">
               <div>{{ record.date }}</div>
-              <div>{{ record.life }}<Like></Like></div>
+              <div class="like">
+                {{ record.life }}<Like :width="'20px'" :height="'20px'"></Like>
+              </div>
             </div>
             <div class="cards">
               <div class="min_card">
@@ -55,7 +57,7 @@
               </div>
               <div class="min_card">
                 <div class="color four"></div>
-                <div class="title">{{ record.time }}</div>
+                <div class="title">{{ record.time | timeFilter }}</div>
               </div>
             </div>
           </div>
@@ -129,6 +131,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.like {
+  // max-height: 20px;
+  // max-width: 20px;
+}
 .log {
   margin-top: 1em;
   .info {

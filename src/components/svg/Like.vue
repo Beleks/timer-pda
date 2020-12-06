@@ -1,8 +1,8 @@
 <template>
   <div class="svg">
     <svg
-      width="20px"
-      height="20px"
+      :width="width"
+      :height="height"
       viewBox="0 0 24 24"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +34,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: ['height', 'width']
+};
 </script>
 
 <style lang="scss" scoped>
