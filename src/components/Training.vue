@@ -100,7 +100,7 @@
         <div>Закончить тренировку</div>
       </div>
     </div>
-    <Result v-if="END" :trainingResult="trainingSettings"></Result>
+    <Result v-if="END" :trainingResult="trainingSettings" @close="END = false"></Result>
   </div>
 </template>
 

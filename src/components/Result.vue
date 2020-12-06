@@ -74,6 +74,7 @@ export default {
         { like: false },
         { like: false },
       ],
+      endMas: {},
     };
   },
   methods: {
@@ -88,20 +89,32 @@ export default {
     },
     endTraining() {
       let mas = this.$store.state.trainingLog;
+
+      let result = this.trainingResult;
+      let life = 0;
+      this.masLike.forEach((element) => {
+        if (element.like === true) {
+          life += 1;
+        }
+      });
+      result.life = life
       if (mas === null) {
         let newMas = [];
-        newMas.push(this.trainingResult);
+        newMas.push(result);
         this.$store.commit("setTraining", newMas);
       } else {
         // JSON.parse(mas)
 
         let newMas = [];
-        newMas.push(this.trainingResult);
+        newMas.push(result);
         let oldMas = mas.slice();
         let resultMas = newMas.concat(oldMas);
         console.log(resultMas, "массив для сохранения");
         this.$store.commit("setTraining", resultMas);
       }
+
+      // передать в родитель END = false 
+      this.$emit("close");
     },
   },
   computed: {
