@@ -17,7 +17,8 @@
           >
             <div>{{ params.title }}</div>
 
-            <div :style="{display: 'flex'}"
+            <div
+              :style="{ display: 'flex' }"
               class="value"
               v-if="params.key === 'time'"
               :class="{
@@ -26,7 +27,10 @@
               }"
             >
               {{ trainingResult[`${params.key}`] | timeFilter }}
-              <div :style="{marginLeft: '0.2em'}" v-if="!progress.timeDif === 0">
+              <div
+                :style="{ marginLeft: '0.2em' }"
+                v-if="!(progress.timeDif === 0)"
+              >
                 ({{ different(trainingResult[`${params.key}`], params.key) }}
                 {{ progress.timeDif | timeFilter }})
               </div>
@@ -259,6 +263,7 @@ export default {
   .text {
     display: flex;
     justify-content: space-between;
+    margin: 0 -0.7em;
     font-size: 0.7rem;
   }
 }
