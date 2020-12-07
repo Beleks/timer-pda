@@ -100,7 +100,11 @@
         <div>Закончить тренировку</div>
       </div>
     </div>
-    <Result v-if="END" :trainingResult="trainingSettings" @close="END = false"></Result>
+    <Result
+      v-if="END"
+      :trainingResult="trainingSettings"
+      @close="END = false"
+    ></Result>
   </div>
 </template>
 
@@ -466,9 +470,10 @@ export default {
   margin-bottom: 1em;
 
   .button {
+    cursor: pointer;
     border-radius: 5px;
     background-color: rgba(255, 107, 107, 0.4);
-    padding: 0.4em 0.8em;
+    padding: 0.4em 1.5em;
     max-width: 200px;
     display: flex;
     justify-content: center;

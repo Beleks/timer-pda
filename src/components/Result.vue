@@ -33,6 +33,7 @@
             v-for="(like, index) in masLike"
             :key="index"
             @click="choseLike(index)"
+            class="heart"
           >
             <Like v-if="like.like" :width="'34px'" :height="'34px'"></Like>
             <UnLike v-else></UnLike>
@@ -139,12 +140,16 @@ export default {
 .end_block {
   position: absolute;
   // min-height: 100%;
+  display: flex;
+  justify-content: center;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   background-color: rgba(255, 255, 255, 1);
   .content {
+    min-width: 300px;
+    max-width: 360px;
     display: flex;
     height: 100%;
     flex-direction: column;
@@ -157,7 +162,7 @@ export default {
       }
     }
     .result {
-      margin: 1em 4em;
+      margin: 1em 2em;
       .params {
         margin-top: 0.5em;
         display: flex;
@@ -182,8 +187,13 @@ export default {
   // align-items: center;
   .top {
     display: flex;
+    justify-content: space-evenly;
     margin: auto;
+    width: 220px;
     margin-top: 0.5em;
+    .heart{
+      cursor: pointer;
+    }
   }
   .text {
     display: flex;
@@ -192,6 +202,7 @@ export default {
   }
 }
 .save {
+  cursor: pointer;
   border-radius: 5px;
   margin: 0 1em;
   margin-top: 1.5em;

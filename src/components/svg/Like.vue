@@ -41,7 +41,7 @@ export default {
 
 <style lang="scss" scoped>
 .svg {
-  margin-left: 0.2em;
+  // margin-left: 0.2em;
   display: flex;
   align-items: center;
   justify-content: center;
