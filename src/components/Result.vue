@@ -17,11 +17,30 @@
           >
             <div>{{ params.title }}</div>
 
-            <div class="value" v-if="params.key === 'time'">
+            <div :style="{display: 'flex'}"
+              class="value"
+              v-if="params.key === 'time'"
+              :class="{
+                green: progress[`${params.key}`] > 0,
+                red: progress[`${params.key}`] < 0,
+              }"
+            >
               {{ trainingResult[`${params.key}`] | timeFilter }}
+              <div :style="{marginLeft: '0.2em'}" v-if="!progress.timeDif === 0">
+                ({{ different(trainingResult[`${params.key}`], params.key) }}
+                {{ progress.timeDif | timeFilter }})
+              </div>
             </div>
-            <div class="value" v-else>
-              {{ trainingResult[`${params.key}`] }}
+            <div
+              class="value"
+              v-else
+              :class="{
+                green: progress[`${params.key}`] > 0,
+                red: progress[`${params.key}`] < 0,
+              }"
+            >
+              <!-- {{ trainingResult[`${params.key}`] }} -->
+              {{ different(trainingResult[`${params.key}`], params.key) }}
             </div>
           </div>
         </transition-group>
@@ -61,6 +80,15 @@ export default {
     return {
       idx: 0,
       el: false,
+      progress: {
+        pda: 0,
+        inhale: 0,
+        exhalation: 0,
+        loop: 0,
+        time: 0,
+        timeNew: "",
+        timeDif: "",
+      },
       mas: [
         { pda: 15, title: "ПДА", key: "pda", delay: 0 },
         { inhale: 2, title: "Вдох", key: "inhale", delay: 0.4 },
@@ -79,6 +107,33 @@ export default {
     };
   },
   methods: {
+    different(value, key) {
+      let oldValue = this.$store.state.trainingLog;
+      if (oldValue.length === 0) {
+        return value;
+      }
+
+      let dif = value - oldValue[0][key];
+      this.progress[key] = dif;
+      if (key !== "time") {
+        if (dif > 0) {
+          return `${value} (+${dif})`;
+        } else if (dif < 0) {
+          return `${value} (${dif})`;
+        } else {
+          return `${value}`;
+        }
+      } else {
+        this.progress.timeDif = Math.abs(dif);
+        if (dif > 0) {
+          return "+";
+        } else if (dif < 0) {
+          return "-";
+        } else {
+          return "";
+        }
+      }
+    },
     choseLike(index) {
       let chose = index + 1;
       this.masLike.forEach((element) => {
@@ -98,7 +153,7 @@ export default {
           life += 1;
         }
       });
-      result.life = life
+      result.life = life;
       if (mas === null) {
         let newMas = [];
         newMas.push(result);
@@ -114,7 +169,7 @@ export default {
         this.$store.commit("setTraining", resultMas);
       }
 
-      // передать в родитель END = false 
+      // передать в родитель END = false
       this.$emit("close");
     },
   },
@@ -123,10 +178,16 @@ export default {
       console.log(this.$store.state.trainingLog);
       return this.$store.state.trainingLog[0];
     },
-    different() {},
   },
   mounted() {
     this.el = true;
+  },
+  filters: {
+    // progressFilter: (value, key) => {
+    //   let oldValue = this.$store.state.trainingLog[0][key]
+    //   console.log(oldValue, "key");
+    //   return "0";
+    // },
   },
   components: {
     Trophy,
@@ -191,7 +252,7 @@ export default {
     margin: auto;
     width: 220px;
     margin-top: 0.5em;
-    .heart{
+    .heart {
       cursor: pointer;
     }
   }
@@ -210,7 +271,12 @@ export default {
   padding: 0.5em 2em;
   background-color: rgba(29, 209, 161, 0.4);
 }
-
+.green {
+  color: rgb(38, 166, 154);
+}
+.red {
+  color: rgb(239, 83, 80);
+}
 // transition
 .item-enter-active,
 .item-leave-active {

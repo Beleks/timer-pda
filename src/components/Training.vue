@@ -323,6 +323,9 @@ export default {
     start() {
       this.training = true;
       this.timer = true;
+
+      // сброс цикла после прошой тренировки 
+      this.forEndTraining.loop = 0 
       let scope = this;
       scope.checkLoop = scope.setings.loop;
       let timer = setInterval(function () {
